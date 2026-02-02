@@ -1,0 +1,21 @@
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 15px -15px 0px -5px;
+    padding-right: 15px;
+    padding-left: 15px;
+    gap: 25px;
+}
+
+img {
+    width: 370px;
+    height: auto;
+    opacity: 0.8;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+img:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+    opacity: 1;
+}
