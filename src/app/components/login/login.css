@@ -1,0 +1,117 @@
+:host {
+  display: block;
+}
+
+/* Contenedor centrado */
+.auth {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+/* Card más “cómoda” */
+.auth__card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 22px; /* más espacio */
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+/* Textos grandes y claros */
+.auth__title {
+  margin: 0 0 6px;
+  font-size: 24px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.auth__subtitle {
+  margin: 0 0 18px;
+  font-size: 15px;
+  color: #6b7280;
+  text-align: center;
+}
+
+/* Form con buen aire */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Inputs con padding real */
+.input {
+  height: 46px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1px solid #d1d5db;
+  outline: none;
+  font-size: 16px;   /* legible */
+  background: #fff;
+}
+
+.input:focus {
+  border-color: #111827;
+  box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.08); /* focus visible */
+}
+
+/* Mensaje error visible */
+.error {
+  margin: 0;
+  font-size: 14px;
+  color: #ef4444;
+  text-align: center;
+}
+
+/* Botón grande */
+.btn {
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid #111827;
+  background: #111827;
+  color: #fff;
+  font-weight: 800;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  filter: brightness(1.07);
+}
+
+.btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Link abajo */
+.link {
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 8px;
+  color: #111827;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

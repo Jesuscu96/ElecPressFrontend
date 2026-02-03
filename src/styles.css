@@ -1,0 +1,144 @@
+* { box-sizing: border-box; }
+
+html, body { height: 100%; margin: 0; }
+
+
+:root {
+  
+  --bg: #f3f4f6;
+
+  
+  --surface: #ffffff;
+  --text: #111827;
+  --border: #e5e7eb;
+
+  
+  --font-base: 16px;
+
+  
+  --btn-primary-bg: #111827;
+  --btn-primary-text: #ffffff;
+  --btn-primary-border: #111827;
+
+  --btn-edit-bg: #2563eb;
+  --btn-edit-text: #ffffff;
+  --btn-edit-border: #2563eb;
+
+  --btn-info-bg: #0ea5e9;
+  --btn-info-text: #ffffff;
+  --btn-info-border: #0ea5e9;
+
+  --btn-delete-bg: #ef4444;
+  --btn-delete-text: #ffffff;
+  --btn-delete-border: #ef4444;
+
+  --btn-neutral-bg: var(--surface);
+  --btn-neutral-text: var(--text);
+  --btn-neutral-border: var(--border);
+
+  --focus-ring: rgba(17, 24, 39, 0.14);
+}
+
+
+.theme-dark {
+  --bg: #0b1220;
+
+  --surface: #0f172a;
+  --text: #e5e7eb;
+  --border: rgba(255,255,255,0.14);
+
+  --btn-primary-bg: #e5e7eb;
+  --btn-primary-text: #0b1220;
+  --btn-primary-border: #e5e7eb;
+
+  --btn-edit-bg: #60a5fa;
+  --btn-edit-text: #0b1220;
+  --btn-edit-border: #60a5fa;
+
+  --btn-info-bg: #38bdf8;
+  --btn-info-text: #0b1220;
+  --btn-info-border: #38bdf8;
+
+  --btn-delete-bg: #fb7185;
+  --btn-delete-text: #0b1220;
+  --btn-delete-border: #fb7185;
+
+  --btn-neutral-bg: transparent;
+  --btn-neutral-text: var(--text);
+  --btn-neutral-border: var(--border);
+
+  --focus-ring: rgba(229, 231, 235, 0.18);
+}
+
+
+.font-md { --font-base: 16px; }
+.font-lg { --font-base: 18px; }
+
+
+body {
+  font-family: "Segoe UI", Arial, system-ui;
+  font-size: var(--font-base);
+  line-height: 1.5;
+  background: var(--bg);
+  color: var(--text);
+}
+
+button, input, select, textarea { font: inherit; }
+
+/* ----- BOTONES ----- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  min-height: 44px;
+  padding: 0.55rem 0.95rem;
+  border-radius: 12px;
+
+  border: 1px solid var(--btn-neutral-border);
+  background: var(--btn-neutral-bg);
+  color: var(--btn-neutral-text);
+
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+.btn:hover { filter: brightness(1.03); }
+
+.btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  filter: none;
+}
+
+
+.btn--primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border-color: var(--btn-primary-border);
+}
+
+.btn--edit {
+  background: var(--btn-edit-bg);
+  color: var(--btn-edit-text);
+  border-color: var(--btn-edit-border);
+}
+
+.btn--info {
+  background: var(--btn-info-bg);
+  color: var(--btn-info-text);
+  border-color: var(--btn-info-border);
+}
+
+.btn--delete {
+  background: var(--btn-delete-bg);
+  color: var(--btn-delete-text);
+  border-color: var(--btn-delete-border);
+}

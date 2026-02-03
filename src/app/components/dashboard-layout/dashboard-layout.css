@@ -1,0 +1,32 @@
+/* Grid general: navbar / main / footer */
+.layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 56px 1fr auto;
+}
+
+/* Área central: sidebar + content */
+.layout__main {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 0; /* importante para scroll correcto */
+}
+
+/* Contenido scrolleable */
+.layout__content {
+  padding: 16px;
+  overflow: auto;
+  min-height: 0;
+}
+
+/* Estado cuando sidebar está colapsado */
+.layout__main--collapsed {
+  grid-template-columns: 76px 1fr;
+}
+
+/* Mobile: sidebar tipo overlay  */
+@media (max-width: 1024px) {
+  .layout__main {
+    grid-template-columns: 1fr;
+  }
+}

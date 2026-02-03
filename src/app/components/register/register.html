@@ -1,0 +1,52 @@
+<section class="auth">
+    <div class="auth__card">
+        <h1 class="auth__title">Registro</h1>
+
+        <p class="ok" *ngIf="okMsg">{{ okMsg }}</p>
+        <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+
+        <form class="form" (ngSubmit)="submit()">
+            <div class="field">
+                <label class="label">Nombre</label>
+                <input class="input" [(ngModel)]="form.first_name" name="first_name" />
+            </div>
+
+            <div class="field">
+                <label class="label">Apellidos</label>
+                <input class="input" [(ngModel)]="form.last_name" name="last_name" />
+            </div>
+
+            <div class="field">
+                <label class="label">Email</label>
+                <input class="input" type="email" [(ngModel)]="form.email" name="email" />
+            </div>
+
+            <div class="field">
+                <label class="label">Teléfono</label>
+                <input class="input" type="text" inputmode="numeric" [(ngModel)]="form.phone" name="phone" placeholder="Ej: 600123123" />
+            </div>
+
+
+            <div class="field">
+                <label class="label">Fecha de nacimiento</label>
+                <input class="input" type="date" [(ngModel)]="form.birth_date" name="birth_date" />
+            </div>
+
+            <div class="field">
+                <label class="label">Contraseña</label>
+                <input class="input" type="password" [(ngModel)]="form.password" name="password" />
+            </div>
+
+            <div class="field">
+                <label class="label">Repite contraseña</label>
+                <input class="input" type="password" [(ngModel)]="confirmPassword" name="confirmPassword" />
+            </div>
+
+            <button class="btn btn--primary" [disabled]="loading" type="submit">
+                {{ loading ? 'Creando...' : 'Crear cuenta' }}
+            </button>
+
+            <a class="link" routerLink="/auth/login">Ya tengo cuenta → Login</a>
+        </form>
+    </div>
+</section>

@@ -1,0 +1,21 @@
+<header class="navbar">
+  <div class="navbar__left">
+    <button class="btn navbar__icon-btn" type="button" (click)="onToggleSidebar()">
+      ☰
+    </button>
+    <span class="navbar__title">ElecPress</span>
+  </div>
+
+  <div class="navbar__right">
+    <button class="btn" type="button" (click)="toggleFont()">A</button>
+    <button class="btn" type="button" (click)="toggleTheme()">Tema</button>
+
+    <span class="navbar__user" *ngIf="isLoggedIn && userLabel">{{ userLabel }}</span>
+    <button class="btn btn--delete" type="button" *ngIf="isLoggedIn" (click)="logout()">
+      Cerrar sesión
+    </button>
+
+    <a class="btn" *ngIf="!isLoggedIn" routerLink="/auth/login">Login</a>
+    <a class="btn btn--primary" *ngIf="!isLoggedIn" routerLink="/auth/register">Registro</a>
+  </div>
+</header>

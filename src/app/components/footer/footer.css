@@ -1,0 +1,42 @@
+:host { display: block; }
+
+.footer {
+  height: 56px; /* 👈 para que no quede “chiquito” */
+  display: flex;
+  align-items: center;
+
+  padding: 0 16px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+.footer__content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  font-size: 14px;        
+  font-weight: 700;       
+  color: var(--text);
+  opacity: 0.8;
+}
+
+.footer__links {
+  display: flex;
+  gap: 12px;
+}
+
+.footer__link {
+  color: var(--text);
+  opacity: 0.8;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.footer__link:hover {
+  opacity: 1;
+}
+
+.footer__brand { opacity: 0.85; }

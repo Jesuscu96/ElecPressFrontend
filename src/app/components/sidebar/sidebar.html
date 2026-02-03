@@ -1,0 +1,26 @@
+<nav class="sidebar">
+  <a
+    class="sidebar__link"
+    routerLink="/dashboard"
+    routerLinkActive="sidebar__link--active"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
+    <i class="fa-solid fa-house sidebar__icon" aria-hidden="true"></i>
+    <span class="sidebar__text">Home</span>
+  </a>
+
+  <a class="sidebar__link" routerLink="/dashboard/clients" routerLinkActive="sidebar__link--active">
+    <i class="fa-solid fa-building sidebar__icon" aria-hidden="true"></i>
+    <span class="sidebar__text">Clientes</span>
+  </a>
+
+  <a class="sidebar__link" routerLink="/dashboard/users" routerLinkActive="sidebar__link--active">
+    <i class="fa-solid fa-users sidebar__icon" aria-hidden="true"></i>
+    <span class="sidebar__text">Usuarios</span>
+  </a>
+
+  <a class="sidebar__link" routerLink="/dashboard/material" routerLinkActive="sidebar__link--active">
+    <i class="fa-solid fa-box sidebar__icon" aria-hidden="true"></i>
+    <span class="sidebar__text">Materiales</span>
+  </a>
+</nav>

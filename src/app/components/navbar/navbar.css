@@ -1,0 +1,39 @@
+:host { display: block; }
+
+.navbar {
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+.navbar__left,
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar__title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+/* Para que el botón hamburguesa sea cuadradito sin tocar .btn global */
+.navbar__icon-btn {
+  min-height: 40px;
+  height: 40px;
+  width: 40px;
+  padding: 0;
+  border-radius: 10px;
+}

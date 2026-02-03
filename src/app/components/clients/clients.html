@@ -1,0 +1,55 @@
+<section class="page">
+  <header class="page__header">
+    <h2 class="page__title">Clientes</h2>
+
+    <input
+      class="input search"
+      type="text"
+      placeholder="Buscar por nombre, empresa o email..."
+      [(ngModel)]="search"
+      (input)="applyFilter()"
+      name="search"
+    />
+
+    <div class="actions">
+      <button class="btn btn--primary" (click)="createClient()">Crear</button>
+    </div>
+  </header>
+
+  <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+  <p *ngIf="loading">Cargando...</p>
+
+  <div class="card" *ngIf="!loading">
+    <table class="table" *ngIf="filtered.length; else empty">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Empresa</th>
+          <th>Email</th>
+          <th>Teléfono</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let c of filtered">
+          <td>{{ c.first_name }} {{ c.last_name }}</td>
+          <td>{{ c.company || '-' }}</td>
+          <td>{{ c.email || '-' }}</td>
+          <td>{{ c.phone }}</td>
+          <td>
+            <div class="actions">
+              <button class="btn btn--info" (click)="showClient(c)">+Info</button>
+              <button class="btn btn--edit" (click)="editClient(c)">Editar</button>
+              <button class="btn btn--delete" (click)="deleteClient(c)">Borrar</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #empty>
+      <p class="empty">No hay clientes que coincidan con la búsqueda.</p>
+    </ng-template>
+  </div>
+</section>
