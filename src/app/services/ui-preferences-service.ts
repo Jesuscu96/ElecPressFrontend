@@ -1,56 +1,57 @@
 import { Injectable } from '@angular/core';
 
-type Theme = 'light' | 'dark';
-type FontSize = 'md' | 'lg';
-
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class UiPreferencesService {
-  private themeKey = 'theme';
-  private fontKey = 'fontSize';
+  theme: 'light' | 'dark' = 'light';
+  font: 'md' | 'lg' = 'md';
 
-  
-  setTheme(theme: Theme): void {
-    
-    document.body.classList.toggle('theme-dark', theme === 'dark');
-    
-    localStorage.setItem(this.themeKey, theme);
-  }
+  private THEME_KEY = 'ui_theme';
+  private FONT_KEY = 'ui_font';
 
-  getTheme(): Theme {
-    const stored = localStorage.getItem(this.themeKey);
-    return stored === 'dark' ? 'dark' : 'light';
+  constructor() {
+    this.loadFromStorage();
+    this.applyToDom();
   }
 
   toggleTheme(): void {
-    const next: Theme = this.getTheme() === 'dark' ? 'light' : 'dark';
-    this.setTheme(next);
-  }
+    if (this.theme === 'dark') this.theme = 'light';
+    else this.theme = 'dark';
 
-  
-  setFontSize(size: FontSize): void {
-    
-    document.body.classList.remove('font-md', 'font-lg');
-    document.body.classList.add(size === 'lg' ? 'font-lg' : 'font-md');
-
-    
-    localStorage.setItem(this.fontKey, size);
-  }
-
-  getFontSize(): FontSize {
-    const stored = localStorage.getItem(this.fontKey);
-    return stored === 'lg' ? 'lg' : 'md';
+    localStorage.setItem(this.THEME_KEY, this.theme);
+    this.applyToDom();
   }
 
   toggleFontSize(): void {
-    const next: FontSize = this.getFontSize() === 'lg' ? 'md' : 'lg';
-    this.setFontSize(next);
+    if (this.font === 'lg') this.font = 'md';
+    else this.font = 'lg';
+
+    localStorage.setItem(this.FONT_KEY, this.font);
+    this.applyToDom();
   }
 
- 
-  applySavedPreferences(): void {
-    this.setTheme(this.getTheme());
-    this.setFontSize(this.getFontSize());
+  private loadFromStorage(): void {
+    const savedTheme = localStorage.getItem(this.THEME_KEY);
+    if (savedTheme === 'dark' || savedTheme === 'light') {
+      this.theme = savedTheme;
+    }
+
+    const savedFont = localStorage.getItem(this.FONT_KEY);
+    if (savedFont === 'md' || savedFont === 'lg') {
+      this.font = savedFont;
+    }
+  }
+
+  private applyToDom(): void {
+    const root = document.documentElement; 
+
+    
+    if (this.theme === 'dark') root.classList.add('theme-dark');
+    else root.classList.remove('theme-dark');
+
+    
+    root.classList.remove('font-md');
+    root.classList.remove('font-lg');
+    if (this.font === 'lg') root.classList.add('font-lg');
+    else root.classList.add('font-md');
   }
 }

@@ -1,55 +1,199 @@
 <section class="page">
-  <header class="page__header">
-    <h2 class="page__title">Clientes</h2>
 
-    <input
-      class="input search"
-      type="text"
-      placeholder="Buscar por nombre, empresa o email..."
-      [(ngModel)]="search"
-      (input)="applyFilter()"
-      name="search"
-    />
+  <div class="header">
+    <div class="header__left">
+      <h1>Clientes</h1>
 
-    <div class="actions">
-      <button class="btn btn--primary" (click)="createClient()">Crear</button>
     </div>
-  </header>
 
-  <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
-  <p *ngIf="loading">Cargando...</p>
+    <div class="header__center">
+      <input class="input input--search" type="text" [(ngModel)]="search" (input)="applyFilter()"
+        placeholder="Buscar por nombre, empresa o email..." />
+    </div>
 
-  <div class="card" *ngIf="!loading">
-    <table class="table" *ngIf="filtered.length; else empty">
+    <div class="header__right">
+      <div class="filters">
+        <label class="radio">
+          <input type="radio" name="order" [(ngModel)]="orderMode" value="default" (change)="applyFilter()">
+          Por defecto
+        </label>
+
+        <label class="radio">
+          <input type="radio" name="order" [(ngModel)]="orderMode" value="name" (change)="applyFilter()">
+          Nombre
+        </label>
+
+        <label class="radio">
+          <input type="radio" name="order" [(ngModel)]="orderMode" value="company" (change)="applyFilter()">
+          Empresa
+        </label>
+      </div>
+
+
+      <div class="filters">
+        <label class="radio">
+          <input type="radio" name="status" [(ngModel)]="statusFilter" value="active" (change)="applyFilter()" />
+          Activos
+        </label>
+
+        <label class="radio">
+          <input type="radio" name="status" [(ngModel)]="statusFilter" value="inactive" (change)="applyFilter()" />
+          Inactivos
+        </label>
+
+        <label class="radio">
+          <input type="radio" name="status" [(ngModel)]="statusFilter" value="all" (change)="applyFilter()" />
+          Todos
+        </label>
+      </div>
+
+      <button class="btn" type="button" (click)="search=''; resetFilters()">Limpiar</button>
+      <button class="btn" type="button" (click)="loadClients()" [disabled]="loading">Recargar</button>
+
+      <button class="btn btn--primary" type="button" (click)="toggleCreate()">
+        {{ showForm ? 'Cerrar' : 'Crear nuevo cliente' }}
+      </button>
+    </div>
+  </div>
+
+
+
+  <div class="alert alert--error" *ngIf="errorMsg">{{ errorMsg }}</div>
+  <div class="alert alert--ok" *ngIf="successMsg">{{ successMsg }}</div>
+
+
+  <div class="card clients-card" *ngIf="showForm">
+    <div class="card__header">
+      <h2>{{ editing ? 'Editar cliente' : 'Nuevo cliente' }}</h2>
+
+      <div class="actions">
+        <button class="btn" *ngIf="editing" (click)="cancelEdit()">Cancelar</button>
+        <button class="btn btn--primary" (click)="submitForm()" [disabled]="loading">
+          {{ editing ? 'Guardar' : 'Crear' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div>
+        <label>Nombre *</label>
+        <input class="input" [(ngModel)]="first_name" name="first_name" />
+      </div>
+
+      <div>
+        <label>Apellidos *</label>
+        <input class="input" [(ngModel)]="last_name" name="last_name" />
+      </div>
+
+      <div>
+        <label>Empresa</label>
+        <input class="input" [(ngModel)]="company" name="company" />
+      </div>
+
+      <div>
+        <label>Teléfono *</label>
+        <input class="input" type="tel" [(ngModel)]="phone" name="phone" />
+      </div>
+
+      <div class="span-2">
+        <label>Email *</label>
+        <input class="input" type="email" [(ngModel)]="email" name="email" />
+      </div>
+
+      <div>
+        <label>Status</label>
+        <select class="input" [(ngModel)]="status" name="status">
+          <option value="active">active</option>
+          <option value="inactive">inactive</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <h2>Listado</h2>
+
+  <div class="loading" *ngIf="loading">Cargando...</div>
+  <div class="table-wrap">
+    <table class="table" *ngIf="filtered.length && !loading; else empty">
       <thead>
         <tr>
           <th>Nombre</th>
           <th>Empresa</th>
           <th>Email</th>
           <th>Teléfono</th>
+          <th>Status</th>
           <th>Acciones</th>
         </tr>
       </thead>
 
       <tbody>
-        <tr *ngFor="let c of filtered">
+        <tr *ngFor="let c of paged" [class.inactive]="c.status === 'inactive'">
           <td>{{ c.first_name }} {{ c.last_name }}</td>
           <td>{{ c.company || '-' }}</td>
           <td>{{ c.email || '-' }}</td>
           <td>{{ c.phone }}</td>
+          <td>{{ c.status }}</td>
           <td>
             <div class="actions">
               <button class="btn btn--info" (click)="showClient(c)">+Info</button>
-              <button class="btn btn--edit" (click)="editClient(c)">Editar</button>
-              <button class="btn btn--delete" (click)="deleteClient(c)">Borrar</button>
+              <button class="btn btn--edit" (click)="startEdit(c)">Editar</button>
+
+
+              <button class="btn" *ngIf="c.status === 'active'" (click)="softDeleteClient(c)">Desactivar</button>
+              <button class="btn" *ngIf="c.status === 'inactive'" (click)="restoreClient(c)">Reactivar</button>
+
+
+              <button class="btn btn--delete" *ngIf="isSuperAdmin" (click)="hardDeleteClient(c)">Borrar
+                definitivo</button>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
-
     <ng-template #empty>
-      <p class="empty">No hay clientes que coincidan con la búsqueda.</p>
+      <p class="muted" *ngIf="!loading">No hay clientes.</p>
     </ng-template>
   </div>
+
+
+
+  <div class="pagination" *ngIf="totalPages >= 1">
+    <button class="btn" (click)="prevPage()" [disabled]="page === 1">Anterior</button>
+
+    <span>Página {{ page }} / {{ totalPages }}</span>
+
+    <button class="btn" (click)="nextPage()" [disabled]="page === totalPages">Siguiente</button>
+
+    <select class="input" [(ngModel)]="pageSize" (ngModelChange)="changePageSize($event)">
+      <option [ngValue]="5">5</option>
+      <option [ngValue]="10">10</option>
+      <option [ngValue]="20">20</option>
+      <option [ngValue]="50">50</option>
+    </select>
+
+  </div>
+
+
+
+
+
+  <div class="card clients-card" *ngIf="selectedClient">
+    <div class="card__header">
+      <h2>Detalle de cliente</h2>
+      <button class="btn" (click)="closeInfo()">Cerrar</button>
+    </div>
+
+    <div class="detail-grid">
+      <div><b>Nombre:</b> {{ selectedClient.first_name }} {{ selectedClient.last_name }}</div>
+      <div><b>Empresa:</b> {{ selectedClient.company || '-' }}</div>
+      <div><b>Email:</b> {{ selectedClient.email }}</div>
+      <div><b>Teléfono:</b> {{ selectedClient.phone }}</div>
+      <div><b>Status:</b> {{ selectedClient.status }}</div>
+      <div><b>Creado:</b> {{ selectedClient.created_at }}</div>
+    </div>
+  </div>
+
 </section>

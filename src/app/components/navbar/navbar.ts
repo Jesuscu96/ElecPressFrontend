@@ -13,25 +13,38 @@ export class Navbar {
 
   constructor(
     public uiPrefs: UiPreferencesService,
-    private router: Router
+    private router: Router,
   ) {}
 
-  
   get isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
 
-  
-  get userLabel(): string {
+  private get storedUser(): any | null {
     const raw = localStorage.getItem('user');
-    if (!raw) return '';
+    if (!raw) return null;
     try {
-      const u = JSON.parse(raw);
-      return `${u.first_name ?? ''} ${u.last_name ?? ''}`.trim();
+      return JSON.parse(raw);
     } catch {
-      return '';
+      return null;
     }
   }
+
+  get userLabel(): string {
+  const u = this.storedUser;
+  if (!u) return '';
+
+  const first = u.first_name ? u.first_name : '';
+  const last = u.last_name ? u.last_name : '';
+  return (first + ' ' + last).trim();
+}
+
+get roleLabel(): string {
+  const u = this.storedUser;
+  if (!u) return '';
+  return u.role ? u.role : '';
+}
+
 
   onToggleSidebar(): void {
     this.sidebarToggle.emit();

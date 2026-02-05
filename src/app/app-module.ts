@@ -9,7 +9,6 @@ import { Footer } from './components/footer/footer';
 import { Register } from './components/register/register';
 import { Login } from './components/login/login';
 import { Sidebar } from './components/sidebar/sidebar';
-import { Users } from './components/users/users';
 import { Material } from './components/material/material';
 import { DashboardLayout } from './components/dashboard-layout/dashboard-layout';
 import { AuthLayout } from './components/auth-layout/auth-layout';
@@ -19,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Clients } from './components/clients/clients';
 import { HTTP_INTERCEPTORS} from '@angular/common/http';
 import { JwtInterceptor } from './interceptors/jwt-interceptor';
+import { Users } from './components/users/users';
 
 @NgModule({
   declarations: [
@@ -29,12 +29,12 @@ import { JwtInterceptor } from './interceptors/jwt-interceptor';
     Register,
     Login,
     Sidebar,
-    Users,
     Material,
     DashboardLayout,
     AuthLayout,
     NotFound,
     Clients,
+    Users,
   ],
   imports: [
     BrowserModule,

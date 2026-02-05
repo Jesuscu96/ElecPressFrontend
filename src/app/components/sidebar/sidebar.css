@@ -53,8 +53,8 @@
   text-overflow: ellipsis;
 }
 
-
-:host(.sidebar--collapsed) .sidebar__text {
+:host(.sidebar--collapsed) .sidebar__text,
+:host(.sidebar--collapsed) .sidebar__section-title {
   display: none;
 }
 

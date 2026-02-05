@@ -6,4 +6,6 @@ export interface ClientInterface {
   phone: number
   email: string
   created_at: string
+  status: 'active' | 'inactive';
+
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 import { LoginResponse } from '../../common/auth-interface';
 @Component({
@@ -14,7 +14,7 @@ export class Login {
   errorMsg: string = '';
   loading: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {}
 
   submit() {
     this.errorMsg = '';
@@ -24,7 +24,10 @@ export class Login {
       next: (res: LoginResponse) => {
         localStorage.setItem('token', res.token);
         localStorage.setItem('user', JSON.stringify(res.user));
-        this.router.navigate(['/dashboard/clients']);
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard/clients';
+        this.router.navigateByUrl(returnUrl);
+        this.loading = false;
+
       },
       error: (err) => {
         this.errorMsg = err?.error?.message || 'Error al iniciar sesión';

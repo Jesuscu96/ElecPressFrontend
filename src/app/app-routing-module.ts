@@ -9,6 +9,7 @@ import { Users } from './components/users/users';
 import { Material } from './components/material/material';
 import { NotFound } from './components/not-found/not-found';
 import { Clients } from './components/clients/clients';
+import { AuthGuard } from './guards/auth-guard';
 
 
 const routes: Routes = [
@@ -34,6 +35,8 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardLayout,
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
     children:  [
       { 
         path: '', 
@@ -49,7 +52,8 @@ const routes: Routes = [
         component: Material 
       },
       { path: 'clients',
-        component: Clients }
+        component: Clients 
+      }
 
     ],
   },

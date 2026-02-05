@@ -29,7 +29,7 @@
   color: var(--text);
 }
 
-/* Para que el botón hamburguesa sea cuadradito sin tocar .btn global */
+
 .navbar__icon-btn {
   min-height: 40px;
   height: 40px;
@@ -37,3 +37,5 @@
   padding: 0;
   border-radius: 10px;
 }
+
+.navbar__role { opacity: 0.7; font-weight: 700; }

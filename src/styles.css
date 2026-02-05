@@ -35,6 +35,8 @@ html, body { height: 100%; margin: 0; }
   --btn-neutral-bg: var(--surface);
   --btn-neutral-text: var(--text);
   --btn-neutral-border: var(--border);
+  --btn-neutral-border-hover: #cbd5e1; 
+
 
   --focus-ring: rgba(17, 24, 39, 0.14);
 }
@@ -66,6 +68,8 @@ html, body { height: 100%; margin: 0; }
   --btn-neutral-bg: transparent;
   --btn-neutral-text: var(--text);
   --btn-neutral-border: var(--border);
+  --btn-neutral-border-hover: rgba(255,255,255,0.26);
+
 
   --focus-ring: rgba(229, 231, 235, 0.18);
 }
@@ -110,7 +114,10 @@ button, input, select, textarea { font: inherit; }
   box-shadow: 0 0 0 4px var(--focus-ring);
 }
 
-.btn:hover { filter: brightness(1.03); }
+.btn:hover { 
+  filter: brightness(1.05);
+  transform: translateY(-1px); 
+}
 
 .btn:disabled {
   opacity: 0.65;
@@ -141,4 +148,52 @@ button, input, select, textarea { font: inherit; }
   background: var(--btn-delete-bg);
   color: var(--btn-delete-text);
   border-color: var(--btn-delete-border);
+}
+/* Card base (skin) */
+.card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+/* Si no quieres padding global, no lo pongas */
+.card--padded{ padding: 16px; }
+
+/* Input base */
+.input{
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 0.55rem 0.75rem;
+}
+
+.input:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+/* Tabla base (skin) */
+.table{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table th, .table td{
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.table tbody tr:last-child td{ border-bottom: 0; }
+
+/* Paginación base */
+.pagination{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }

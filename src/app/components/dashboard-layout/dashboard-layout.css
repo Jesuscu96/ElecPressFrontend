@@ -8,8 +8,9 @@
 /* Área central: sidebar + content */
 .layout__main {
   display: grid;
-  grid-template-columns: 260px 1fr;
-  min-height: 0; /* importante para scroll correcto */
+  grid-template-columns: 260px minmax(0, 1fr); /* ✅ sidebar fijo + contenido flexible */
+  min-height: 0;
+  min-width: 0; /* ✅ evita que tablas rompan el layout */
 }
 
 /* Contenido scrolleable */
@@ -17,14 +18,15 @@
   padding: 16px;
   overflow: auto;
   min-height: 0;
+  min-width: 0; /* ✅ clave */
 }
 
 /* Estado cuando sidebar está colapsado */
 .layout__main--collapsed {
-  grid-template-columns: 76px 1fr;
+  grid-template-columns: 76px minmax(0, 1fr);
 }
 
-/* Mobile: sidebar tipo overlay  */
+/* Mobile */
 @media (max-width: 1024px) {
   .layout__main {
     grid-template-columns: 1fr;
