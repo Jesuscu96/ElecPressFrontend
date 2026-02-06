@@ -41,11 +41,11 @@ export class Register {
       this.errorMsg = 'Email y contraseña son obligatorios.';
       return;
     }
-    const strongPass = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+    const strongPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
 
     if (!strongPass.test(f.password)) {
       this.errorMsg =
-        'La contraseña debe tener mínimo 8 caracteres e incluir una letra, un número y un símbolo.';
+        'La contraseña debe tener mínimo 8 caracteres e incluir una letra minucula y mayucula, un número y un símbolo.';
       return;
     }
 

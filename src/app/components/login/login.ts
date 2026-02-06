@@ -30,7 +30,7 @@ export class Login {
 
       },
       error: (err) => {
-        this.errorMsg = err?.error?.message || 'Error al iniciar sesión';
+        this.errorMsg = err || 'Error al iniciar sesión';
         this.loading = false;
       },
       complete: () => {

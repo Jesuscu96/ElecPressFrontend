@@ -33,6 +33,13 @@ export class Clients implements OnInit {
   email: string = '';
   status: 'active' | 'inactive' = 'active';
 
+  confirmRowId: number | null = null;
+  confirmType: 'soft' | 'hard' | null = null;
+  confirmMessage: string = '';
+  confirmButtonText: string = '';
+  confirmClient: ClientInterface | null = null;
+
+
   editing: boolean = false;
   editId: number | null = null;
 
@@ -66,7 +73,7 @@ export class Clients implements OnInit {
     this.loading = true;
     this.search = '';
     this.errorMsg = '';
-    this.successMsg = '';
+    //this.successMsg = '';
 
     this.clientsService.index().subscribe({
       next: (data) => {
@@ -82,6 +89,48 @@ export class Clients implements OnInit {
       },
     });
   }
+  
+  openSoftConfirm(c: ClientInterface): void {
+  this.confirmRowId = c.id;
+  this.confirmType = 'soft';
+  this.confirmClient = c;
+
+  this.confirmMessage = '¿Seguro que quieres desactivar este cliente?';
+  this.confirmButtonText = 'Desactivar';
+}
+
+openHardConfirm(c: ClientInterface): void {
+  this.confirmRowId = c.id;
+  this.confirmType = 'hard';
+  this.confirmClient = c;
+
+  this.confirmMessage = 'Vas a borrar DEFINITIVO. Esta acción no se puede deshacer. ¿Continuar?';
+  this.confirmButtonText = 'Borrar definitivo';
+}
+
+cancelConfirm(): void {
+  this.confirmRowId = null;
+  this.confirmType = null;
+  this.confirmClient = null;
+  this.confirmMessage = '';
+  this.confirmButtonText = '';
+}
+
+confirmAction(): void {
+  if (this.confirmClient === null || this.confirmType === null) {
+    this.cancelConfirm();
+    return;
+  }
+
+  if (this.confirmType === 'soft') {
+    this.softDeleteClient(this.confirmClient);
+  } else {
+    this.hardDeleteClient(this.confirmClient);
+  }
+
+  this.cancelConfirm();
+}
+
 
   //mi quebradero de cabeza
 
@@ -267,7 +316,9 @@ export class Clients implements OnInit {
 
     this.clientsService.create(body).subscribe({
       next: () => {
+        
         this.successMsg = 'Cliente creado.';
+        this.showForm = false;
         this.resetForm();
         this.loadClients();
       },
@@ -326,6 +377,7 @@ export class Clients implements OnInit {
         this.editing = false;
         this.editId = null;
         this.resetForm();
+        this.showForm = false;
         this.loadClients();
       },
       error: (err) => {
@@ -351,9 +403,7 @@ export class Clients implements OnInit {
   }
 
   softDeleteClient(c: ClientInterface): void {
-    const ok = confirm(`¿Desactivar a "${c.first_name} ${c.last_name}"?`);
-    if (!ok) return;
-
+    
     this.loading = true;
     this.errorMsg = '';
     this.successMsg = '';
@@ -414,9 +464,7 @@ export class Clients implements OnInit {
   }
 
   hardDeleteClient(c: ClientInterface): void {
-    const ok = confirm(`Borrar DEFINITIVO a "${c.first_name} ${c.last_name}"?`);
-    if (!ok) return;
-
+  
     this.loading = true;
     this.errorMsg = '';
     this.successMsg = '';
