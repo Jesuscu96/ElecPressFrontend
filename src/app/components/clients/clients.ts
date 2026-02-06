@@ -31,6 +31,7 @@ export class Clients implements OnInit {
   company: string = '';
   phone: string = '';
   email: string = '';
+  created_at: string = ''; 
   status: 'active' | 'inactive' = 'active';
 
   confirmRowId: number | null = null;
@@ -38,7 +39,6 @@ export class Clients implements OnInit {
   confirmMessage: string = '';
   confirmButtonText: string = '';
   confirmClient: ClientInterface | null = null;
-
 
   editing: boolean = false;
   editId: number | null = null;
@@ -49,8 +49,7 @@ export class Clients implements OnInit {
 
   showForm: boolean = false;
 
-  constructor(private clientsService: ClientsService) { }
-
+  constructor(private clientsService: ClientsService) {}
   ngOnInit(): void {
     const raw = localStorage.getItem('user');
     if (raw) {
@@ -64,11 +63,6 @@ export class Clients implements OnInit {
 
     this.loadClients();
   }
-  toggleCreate(): void {
-    if (this.showForm && this.editing) this.cancelEdit();
-    this.showForm = !this.showForm;
-  }
-
   loadClients(): void {
     this.loading = true;
     this.search = '';
@@ -89,48 +83,53 @@ export class Clients implements OnInit {
       },
     });
   }
-  
+
+  toggleCreate(): void {
+    if (this.showForm && this.editing) this.cancelEdit();
+    this.showForm = !this.showForm;
+  }
+
   openSoftConfirm(c: ClientInterface): void {
-  this.confirmRowId = c.id;
-  this.confirmType = 'soft';
-  this.confirmClient = c;
+    this.confirmRowId = c.id;
+    this.confirmType = 'soft';
+    this.confirmClient = c;
 
-  this.confirmMessage = '¿Seguro que quieres desactivar este cliente?';
-  this.confirmButtonText = 'Desactivar';
-}
+    this.confirmMessage = '¿Seguro que quieres desactivar este cliente?';
+    this.confirmButtonText = 'Desactivar';
+  }
 
-openHardConfirm(c: ClientInterface): void {
-  this.confirmRowId = c.id;
-  this.confirmType = 'hard';
-  this.confirmClient = c;
+  openHardConfirm(c: ClientInterface): void {
+    this.confirmRowId = c.id;
+    this.confirmType = 'hard';
+    this.confirmClient = c;
 
-  this.confirmMessage = 'Vas a borrar DEFINITIVO. Esta acción no se puede deshacer. ¿Continuar?';
-  this.confirmButtonText = 'Borrar definitivo';
-}
+    this.confirmMessage =
+      'Vas a borrar DEFINITIVO. Esta acción no se puede deshacer. ¿Continuar?';
+    this.confirmButtonText = 'Borrar definitivo';
+  }
 
-cancelConfirm(): void {
-  this.confirmRowId = null;
-  this.confirmType = null;
-  this.confirmClient = null;
-  this.confirmMessage = '';
-  this.confirmButtonText = '';
-}
+  cancelConfirm(): void {
+    this.confirmRowId = null;
+    this.confirmType = null;
+    this.confirmClient = null;
+    this.confirmMessage = '';
+    this.confirmButtonText = '';
+  }
 
-confirmAction(): void {
-  if (this.confirmClient === null || this.confirmType === null) {
+  confirmAction(): void {
+    if (this.confirmClient === null || this.confirmType === null) {
+      this.cancelConfirm();
+      return;
+    }
+
+    if (this.confirmType === 'soft') {
+      this.softDeleteClient(this.confirmClient);
+    } else {
+      this.hardDeleteClient(this.confirmClient);
+    }
+
     this.cancelConfirm();
-    return;
   }
-
-  if (this.confirmType === 'soft') {
-    this.softDeleteClient(this.confirmClient);
-  } else {
-    this.hardDeleteClient(this.confirmClient);
-  }
-
-  this.cancelConfirm();
-}
-
 
   //mi quebradero de cabeza
 
@@ -155,10 +154,19 @@ confirmAction(): void {
     if (!q) return list;
 
     return list.filter((c) => {
-      const fullName = (this.toText(c.first_name) + ' ' + this.toText(c.last_name)).toLowerCase();
+      const fullName = (
+        this.toText(c.first_name) +
+        ' ' +
+        this.toText(c.last_name)
+      ).toLowerCase();
 
       const company = this.toText(c.company).toLowerCase();
       const email = this.toText(c.email).toLowerCase();
+
+      // if (fullName.includes(searchFormated))return true;
+      // if (email.includes(searchFormated)) return true;
+      // if (company.includes(searchFormated)) return true;
+      // return false;
 
       return (
         fullName.indexOf(q) !== -1 ||
@@ -175,8 +183,16 @@ confirmAction(): void {
 
     if (this.orderMode === 'name') {
       copy.sort((a, b) => {
-        const an = (this.toText(a.first_name) + ' ' + this.toText(a.last_name)).toLowerCase();
-        const bn = (this.toText(b.first_name) + ' ' + this.toText(b.last_name)).toLowerCase();
+        const an = (
+          this.toText(a.first_name) +
+          ' ' +
+          this.toText(a.last_name)
+        ).toLowerCase();
+        const bn = (
+          this.toText(b.first_name) +
+          ' ' +
+          this.toText(b.last_name)
+        ).toLowerCase();
 
         if (an > bn) return 1;
         if (an < bn) return -1;
@@ -199,22 +215,17 @@ confirmAction(): void {
   }
 
   applyFilter(): void {
-
-    let list = [...this.clients]
-
+    let list = [...this.clients];
 
     list = this.filterByStatus(list);
     list = this.filterBySearch(list);
 
-
     list = this.sortList(list);
-
 
     this.filtered = list;
     this.page = 1;
     this.updatePagination();
   }
-
 
   resetFilters(): void {
     this.search = '';
@@ -223,8 +234,6 @@ confirmAction(): void {
     this.page = 1;
     this.applyFilter();
   }
-
-
 
   updatePagination(): void {
     this.totalPages = Math.max(
@@ -239,6 +248,8 @@ confirmAction(): void {
     const end = start + this.pageSize;
 
     this.paged = this.filtered.slice(start, end);
+    
+
   }
 
   nextPage(): void {
@@ -316,7 +327,6 @@ confirmAction(): void {
 
     this.clientsService.create(body).subscribe({
       next: () => {
-        
         this.successMsg = 'Cliente creado.';
         this.showForm = false;
         this.resetForm();
@@ -332,17 +342,17 @@ confirmAction(): void {
     });
   }
 
-  startEdit(c: ClientInterface): void {
+  startEdit(client: ClientInterface): void {
     this.editing = true;
     this.showForm = true;
-    this.editId = c.id;
+    this.editId = client.id;
 
-    this.first_name = c.first_name ?? '';
-    this.last_name = c.last_name ?? '';
-    this.company = c.company ?? '';
-    this.phone = String(c.phone ?? '');
-    this.email = c.email ?? '';
-    this.status = (c.status ?? 'active') as any;
+    this.first_name = client.first_name != null ? client.first_name : '';
+    this.last_name = client.last_name != null ? client.last_name : '';
+    this.company = client.company != null ? client.company : '';
+    this.phone = client.phone != null ? String(client.phone) : '';
+    this.email = client.email != null ? client.email : '';
+    this.status = client.status != null ? (client.status as any) : 'active';
 
     this.selectedClient = null;
     this.errorMsg = '';
@@ -390,11 +400,13 @@ confirmAction(): void {
     });
   }
 
-  showClient(c: ClientInterface): void {
-    if (this.selectedClient && this.selectedClient.id === c.id) {
+  showClient(client: ClientInterface): void {
+    if (this.selectedClient && this.selectedClient.id === client.id) {
       this.selectedClient = null;
     } else {
-      this.selectedClient = c;
+      this.selectedClient = client;
+      this.selectedClient.created_at
+      new Date(this.selectedClient.created_at.replace(' ', 'T'))
     }
   }
 
@@ -403,7 +415,6 @@ confirmAction(): void {
   }
 
   softDeleteClient(c: ClientInterface): void {
-    
     this.loading = true;
     this.errorMsg = '';
     this.successMsg = '';
@@ -464,7 +475,6 @@ confirmAction(): void {
   }
 
   hardDeleteClient(c: ClientInterface): void {
-  
     this.loading = true;
     this.errorMsg = '';
     this.successMsg = '';
