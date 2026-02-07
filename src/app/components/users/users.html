@@ -2,7 +2,7 @@
 
   <div class="header">
     <div class="header__left">
-      <h1>Clientes</h1>
+      <h1>Usuarios</h1>
 
     </div>
 
@@ -19,26 +19,39 @@
         </label>
 
         <label class="radio">
-          <input type="radio" name="order" [(ngModel)]="orderMode" value="name" (change)="applyFilter()">
-          Nombre
+          <input type="radio" name="order" [(ngModel)]="orderMode" value="create_at_asc" (change)="applyFilter()">
+          Fecha de alta ↑
         </label>
 
         <label class="radio">
-          <input type="radio" name="order" [(ngModel)]="orderMode" value="company" (change)="applyFilter()">
-          Empresa
+          <input type="radio" name="order" [(ngModel)]="orderMode" value="create_at_des" (change)="applyFilter()">
+          Fecha de baja ↓
+        </label>
+
+        <label class="radio">
+          <input type="radio" name="order" [(ngModel)]="orderMode" value="name" (change)="applyFilter()">
+          Nombre
         </label>
       </div>
 
 
       <div class="filters">
         <label class="radio">
-          <input type="radio" name="status" [(ngModel)]="roleFilter" value="active" (change)="applyFilter()" />
-          Activos
+          <input type="radio" name="status" [(ngModel)]="roleFilter" value="user" (change)="applyFilter()" />
+          Usuarios
+        </label>
+        <label class="radio">
+          <input type="radio" name="status" [(ngModel)]="roleFilter" value="admin" (change)="applyFilter()" />
+          Administradores
+        </label>
+        <label class="radio">
+          <input type="radio" name="status" [(ngModel)]="roleFilter" value="superAdmin" (change)="applyFilter()" />
+          SuperAministrador
         </label>
 
         <label class="radio">
           <input type="radio" name="status" [(ngModel)]="roleFilter" value="inactive" (change)="applyFilter()" />
-          Inactivos
+          Dado de baja
         </label>
 
         <label class="radio">
@@ -48,7 +61,7 @@
       </div>
 
       <button class="btn" type="button" (click)="search=''; resetFilters()">Limpiar</button>
-      <button class="btn" type="button" (click)="loadClients()" [disabled]="loading">Recargar</button>
+      <button class="btn" type="button" (click)="loadUsers()" [disabled]="loading">Recargar</button>
 
       <button class="btn btn--primary" type="button" (click)="toggleCreate()">
         {{ showForm ? 'Cerrar' : 'Crear nuevo cliente' }}
@@ -86,8 +99,8 @@
       </div>
 
       <div>
-        <label>Empresa</label>
-        <input class="input" [(ngModel)]="company" name="company" />
+        <label>Fecha de nacimiento</label>
+        <input class="input" [(ngModel)]="birth_date" name="birth_date" />
       </div>
 
       <div>
@@ -101,10 +114,16 @@
       </div>
 
       <div>
-        <label>Status</label>
-        <select class="input select" [(ngModel)]="status" name="status">
-          <option value="active">active</option>
-          <option value="inactive">inactive</option>
+        <label>imagen</label>
+        <input class="input" type="text" [(ngModel)]="image" name="image" />
+      </div>
+      <div>
+        <label>Rol</label>
+        <select class="input select" [(ngModel)]="role" name="role">
+          <option value="user">Usuario</option>
+          <option value="admin">administrador</option>
+          <option value="superAdmin">Super Administrador</option>
+          <option value="inactive">Inactiva</option>
         </select>
       </div>
     </div>
@@ -127,43 +146,48 @@
     <table class="table" *ngIf="filtered.length && !loading; else empty">
       <thead>
         <tr>
+          <th>Imagen</th>
           <th>Nombre</th>
-          <th>Empresa</th>
+          <th>Edad</th>
           <th>Email</th>
           <th>Teléfono</th>
-          <th>Status</th>
+          <th>Rol</th>
+          <th>Fecha Alta</th>
           <th>Acciones</th>
         </tr>
       </thead>
 
       <tbody>
-        <ng-container *ngFor="let c of paged">
-          <tr [class.inactive]="c.status === 'inactive'">
-            <td>{{ c.first_name }} {{ c.last_name }}</td>
-            <td>{{ c.company || '-' }}</td>
-            <td>{{ c.email || '-' }}</td>
-            <td>{{ c.phone }}</td>
-            <td>{{ c.status }}</td>
-            <td>
-              <div class="actions" *ngIf="confirmRowId !== c.id">
-                <button class="btn btn--info" (click)="showClient(c)">+Info</button>
-                <button class="btn btn--edit" (click)="startEdit(c)">Editar</button>
+        <ng-container *ngFor="let user of paged">
+          <tr [class.inactive]="user.role === 'inactive'">
+            <td>{{ user.image }}</td>
+            <td>{{ user.first_name }} {{ user.last_name }}</td>
+            <td>{{ user.birth_date || '-' }}</td>
+            <td>{{ user.email || '-' }}</td>
+            <td>{{ user.phone }}</td>
+            <td>{{ user.role }}</td>
+            <td>{{ user.created_at | date:'dd/MM/yyyy'}}</td>
 
-                <button class="btn" *ngIf="c.status === 'active'" (click)="openSoftConfirm(c)">
+            <td>
+              <div class="actions" *ngIf="confirmRowId !== user.id">
+                <button class="btn btn--info" (click)="showUser(user)">+Info</button>
+                <button class="btn btn--edit" (click)="startEdit(user)">Editar</button>
+
+                <button class="btn" *ngIf="user.role === 'user'" (click)="openSoftConfirm(user)">
                   Desactivar
                 </button>
 
-                <button class="btn" *ngIf="c.status === 'inactive'" (click)="restoreClient(c)">
+                <button class="btn" *ngIf="user.role === 'inactive'" (click)="restoreUser(user)">
                   Reactivar
                 </button>
 
-                <button class="btn btn--delete" *ngIf="isSuperAdmin" (click)="openHardConfirm(c)">
+                <button class="btn btn--delete" *ngIf="isSuperAdmin" (click)="openHardConfirm(user)">
                   Borrar definitivo
                 </button>
               </div>
 
               
-              <div class="actions" *ngIf="confirmRowId === c.id">
+              <div class="actions" *ngIf="confirmRowId === user.id">
                 <button class="btn" (click)="cancelConfirm()">Cancelar</button>
                 <button class="btn btn--delete" (click)="confirmAction()">
                   {{ confirmButtonText }}
@@ -173,7 +197,7 @@
           </tr>
 
           
-          <tr *ngIf="confirmRowId === c.id" class="confirm-row">
+          <tr *ngIf="confirmRowId === user.id" class="confirm-row">
             <td colspan="6">
               <div class="confirm-box">
                 <span class="confirm-text">{{ confirmMessage }}</span>
@@ -185,7 +209,7 @@
 
     </table>
     <ng-template #empty>
-      <p class="muted" *ngIf="!loading">No hay clientes.</p>
+      <p class="muted" *ngIf="!loading">No hay usuarios.</p>
     </ng-template>
   </div>
 
@@ -211,19 +235,19 @@
 
 
 
-  <div class="card clients-card" *ngIf="selectedClient">
+  <div class="card clients-card" *ngIf="selectedUser">
     <div class="card__header">
       <h2>Detalle de cliente</h2>
       <button class="btn" (click)="closeInfo()">Cerrar</button>
     </div>
 
     <div class="detail-grid">
-      <div><b>Nombre:</b> {{ selectedClient.first_name }} {{ selectedClient.last_name }}</div>
-      <div><b>Empresa:</b> {{ selectedClient.company || '-' }}</div>
-      <div><b>Email:</b> {{ selectedClient.email }}</div>
-      <div><b>Teléfono:</b> {{ selectedClient.phone }}</div>
-      <div><b>Status:</b> {{ selectedClient.status }}</div>
-      <div><b>Creado:</b> {{ selectedClient.created_at }}</div>
+      <div><b>Nombre:</b> {{ selectedUser.first_name }} {{ selectedUser.last_name }}</div>
+      <div><b>Edad:</b> {{ selectedUser.birth_date || '-' }}</div>
+      <div><b>Email:</b> {{ selectedUser.email }}</div>
+      <div><b>Teléfono:</b> {{ selectedUser.phone }}</div>
+      <div><b>Rol:</b> {{ selectedUser.role }}</div>
+      <div><b>Creado:</b> {{ selectedUser.created_at | date:'dd/MM/yyyy' }}</div>
     </div>
   </div>
 

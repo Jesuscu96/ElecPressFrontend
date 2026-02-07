@@ -152,15 +152,15 @@
                 <button class="btn btn--edit" (click)="startEdit(c)">Editar</button>
 
                 <button class="btn" *ngIf="c.status === 'active'" (click)="openSoftConfirm(c)">
-                  Desactivar
+                  Dar de Baja
                 </button>
 
                 <button class="btn" *ngIf="c.status === 'inactive'" (click)="restoreClient(c)">
-                  Reactivar
+                  Dar de alta
                 </button>
 
                 <button class="btn btn--delete" *ngIf="isSuperAdmin" (click)="openHardConfirm(c)">
-                  Borrar definitivo
+                  Borrar
                 </button>
               </div>
 

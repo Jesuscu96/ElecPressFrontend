@@ -94,8 +94,8 @@ export class Clients implements OnInit {
     this.confirmType = 'soft';
     this.confirmClient = c;
 
-    this.confirmMessage = '¿Seguro que quieres desactivar este cliente?';
-    this.confirmButtonText = 'Desactivar';
+    this.confirmMessage = '¿Seguro que quieres dar de baja este cliente?';
+    this.confirmButtonText = 'Confirmar Baja';
   }
 
   openHardConfirm(c: ClientInterface): void {
@@ -104,8 +104,8 @@ export class Clients implements OnInit {
     this.confirmClient = c;
 
     this.confirmMessage =
-      'Vas a borrar DEFINITIVO. Esta acción no se puede deshacer. ¿Continuar?';
-    this.confirmButtonText = 'Borrar definitivo';
+      'Vas a borrar PERMANENTEMENTE. Esta acción no se puede deshacer. ¿Continuar?';
+    this.confirmButtonText = 'Borrar permanentemente';
   }
 
   cancelConfirm(): void {
@@ -405,8 +405,7 @@ export class Clients implements OnInit {
       this.selectedClient = null;
     } else {
       this.selectedClient = client;
-      this.selectedClient.created_at
-      new Date(this.selectedClient.created_at.replace(' ', 'T'))
+      new Date(this.selectedClient.created_at.replace(' ', 'T'));
     }
   }
 
@@ -430,12 +429,12 @@ export class Clients implements OnInit {
 
     this.clientsService.update(c.id, body).subscribe({
       next: () => {
-        this.successMsg = 'Cliente desactivado.';
+        this.successMsg = 'Cliente dado de baja.';
         this.selectedClient = null;
         this.loadClients();
       },
       error: (err) => {
-        this.errorMsg = err?.error?.message || 'Error desactivando cliente';
+        this.errorMsg = err?.error?.message || 'Error al dar de baja al cliente';
         this.loading = false;
       },
       complete: () => {
@@ -460,12 +459,12 @@ export class Clients implements OnInit {
 
     this.clientsService.update(c.id, body).subscribe({
       next: () => {
-        this.successMsg = 'Cliente reactivado.';
+        this.successMsg = 'Cliente dado de alta.';
         this.selectedClient = null;
         this.loadClients();
       },
       error: (err) => {
-        this.errorMsg = err?.error?.message || 'Error reactivando cliente';
+        this.errorMsg = err?.error?.message || 'Error al dar de alta al cliente';
         this.loading = false;
       },
       complete: () => {
@@ -481,12 +480,12 @@ export class Clients implements OnInit {
 
     this.clientsService.delete(c.id).subscribe({
       next: () => {
-        this.successMsg = 'Cliente eliminado definitivamente.';
+        this.successMsg = 'Cliente eliminado permanentemente.';
         this.selectedClient = null;
         this.loadClients();
       },
       error: (err) => {
-        this.errorMsg = err?.error?.message || 'Error borrando definitivamente';
+        this.errorMsg = err?.error?.message || 'Error borrando permanentemente';
         this.loading = false;
       },
       complete: () => {
