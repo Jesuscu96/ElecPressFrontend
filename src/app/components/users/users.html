@@ -19,12 +19,12 @@
         </label>
 
         <label class="radio">
-          <input type="radio" name="order" [(ngModel)]="orderMode" value="create_at_asc" (change)="applyFilter()">
+          <input type="radio" name="order" [(ngModel)]="orderMode" value="created_at_asc" (change)="applyFilter()">
           Fecha de alta ↑
         </label>
 
         <label class="radio">
-          <input type="radio" name="order" [(ngModel)]="orderMode" value="create_at_des" (change)="applyFilter()">
+          <input type="radio" name="order" [(ngModel)]="orderMode" value="created_at_des" (change)="applyFilter()">
           Fecha de baja ↓
         </label>
 
@@ -64,7 +64,7 @@
       <button class="btn" type="button" (click)="loadUsers()" [disabled]="loading">Recargar</button>
 
       <button class="btn btn--primary" type="button" (click)="toggleCreate()">
-        {{ showForm ? 'Cerrar' : 'Crear nuevo cliente' }}
+        {{ showForm ? 'Cerrar' : 'Crear un nuevo usuario' }}
       </button>
     </div>
   </div>
@@ -73,7 +73,7 @@
 
   <div class="alert alert--error" *ngIf="errorMsg">
     {{ errorMsg }}
-    <button class="alert__close" type="button" (click)="successMsg=''">×</button>
+    <button class="alert__close" type="button" (click)="errorMsg=''">×</button>
   </div>
   <div class="alert alert--ok" *ngIf="successMsg">
     {{ successMsg }}
@@ -122,10 +122,23 @@
         <select class="input select" [(ngModel)]="role" name="role">
           <option value="user">Usuario</option>
           <option value="admin">administrador</option>
-          <option value="superAdmin">Super Administrador</option>
+          <option value="superAdmin" *ngIf="isSuperAdmin">Super Administrador</option>
           <option value="inactive">Inactiva</option>
         </select>
       </div>
+      <div  *ngIf="!editing">
+        <label>Contraseña *</label>
+        <input class="input" type="password" [(ngModel)]="newPassword" name="newPassword" />
+      </div>
+
+      <button class="btn select" type="button" *ngIf="editing" (click)="togglePasswordBox()">
+        {{ showPasswordBox ? 'Cancelar contraseña' : 'Nueva contraseña' }}
+      </button>
+      <div  *ngIf="editing && showPasswordBox">
+        <label>Nueva contraseña *</label>
+        <input class="input" type="password" [(ngModel)]="newPassword" name="newPassword" />
+      </div>
+
     </div>
     <br>
     <div class="actions">
@@ -162,7 +175,7 @@
           <tr [class.inactive]="user.role === 'inactive'">
             <td>{{ user.image }}</td>
             <td>{{ user.first_name }} {{ user.last_name }}</td>
-            <td>{{ user.birth_date || '-' }}</td>
+            <td>{{ calculateAge(user.birth_date)}}</td>
             <td>{{ user.email || '-' }}</td>
             <td>{{ user.phone }}</td>
             <td>{{ user.role }}</td>
@@ -171,22 +184,22 @@
             <td>
               <div class="actions" *ngIf="confirmRowId !== user.id">
                 <button class="btn btn--info" (click)="showUser(user)">+Info</button>
-                <button class="btn btn--edit" (click)="startEdit(user)">Editar</button>
+                <button class="btn btn--edit" *ngIf="canEditUser(user)" (click)="startEdit(user)">Editar</button>
 
-                <button class="btn" *ngIf="user.role === 'user'" (click)="openSoftConfirm(user)">
-                  Desactivar
+                <button class="btn" *ngIf="canSoftDeactivate(user)" (click)="openSoftConfirm(user)">
+                  Dar de baja
                 </button>
 
-                <button class="btn" *ngIf="user.role === 'inactive'" (click)="restoreUser(user)">
-                  Reactivar
+                <button class="btn" *ngIf="canRestore(user)" (click)="restoreUser(user)">
+                  Dar de alta
                 </button>
 
-                <button class="btn btn--delete" *ngIf="isSuperAdmin" (click)="openHardConfirm(user)">
+                <button class="btn btn--delete" *ngIf="canHardDelete(user)" (click)="openHardConfirm(user)">
                   Borrar definitivo
                 </button>
               </div>
 
-              
+
               <div class="actions" *ngIf="confirmRowId === user.id">
                 <button class="btn" (click)="cancelConfirm()">Cancelar</button>
                 <button class="btn btn--delete" (click)="confirmAction()">
@@ -196,9 +209,9 @@
             </td>
           </tr>
 
-          
+
           <tr *ngIf="confirmRowId === user.id" class="confirm-row">
-            <td colspan="6">
+            <td colspan="8">
               <div class="confirm-box">
                 <span class="confirm-text">{{ confirmMessage }}</span>
               </div>
@@ -243,7 +256,7 @@
 
     <div class="detail-grid">
       <div><b>Nombre:</b> {{ selectedUser.first_name }} {{ selectedUser.last_name }}</div>
-      <div><b>Edad:</b> {{ selectedUser.birth_date || '-' }}</div>
+      <div><b>Edad:</b> {{ calculateAge(selectedUser.birth_date) }}</div>
       <div><b>Email:</b> {{ selectedUser.email }}</div>
       <div><b>Teléfono:</b> {{ selectedUser.phone }}</div>
       <div><b>Rol:</b> {{ selectedUser.role }}</div>

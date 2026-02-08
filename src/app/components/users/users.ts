@@ -8,8 +8,6 @@ import { UsersService } from '../../services/users-service';
   templateUrl: './users.html',
   styleUrl: './users.css',
 })
-
-
 export class Users implements OnInit {
   users: UsersInterface[] = [];
   filtered: UsersInterface[] = [];
@@ -21,14 +19,17 @@ export class Users implements OnInit {
   totalPages: number = 1;
 
   search: string = '';
-  
-  roleFilter: 'superAdmin' | 'admin' | 'user' | 'inactive' | 'all' = 'user';
+
+  roleFilter: 'superAdmin' | 'admin' | 'user' | 'inactive' | 'all' = 'all';
   orderMode: 'default' | 'name' | 'created_at_asc' | 'created_at_des' =
     'default';
 
   loading: boolean = false;
   errorMsg: string = '';
   successMsg: string = '';
+
+  currentUserId: number | null = null;
+  currentUserRole: string = '';
 
   first_name: string = '';
   last_name: string = '';
@@ -39,6 +40,8 @@ export class Users implements OnInit {
   birth_date: string = '';
   image: string = '';
   role: 'superAdmin' | 'admin' | 'user' | 'inactive' = 'user';
+  showPasswordBox: boolean = false;
+  newPassword: string = '';
 
   confirmRowId: number | null = null;
   confirmType: 'soft' | 'hard' | null = null;
@@ -63,8 +66,12 @@ export class Users implements OnInit {
       try {
         const user = JSON.parse(raw);
         this.isSuperAdmin = user.role === 'superAdmin';
+        this.currentUserRole = user.role;
+        this.currentUserId = user.id;
       } catch {
         this.isSuperAdmin = false;
+        this.currentUserRole = '';
+        this.currentUserId = null;
       }
     }
 
@@ -95,6 +102,11 @@ export class Users implements OnInit {
   toggleCreate(): void {
     if (this.showForm && this.editing) this.cancelEdit();
     this.showForm = !this.showForm;
+
+    if (this.showForm && !this.editing) {
+      this.newPassword = '';
+      this.showPasswordBox = false;
+    }
   }
   openSoftConfirm(user: UsersInterface): void {
     this.confirmRowId = user.id;
@@ -146,7 +158,8 @@ export class Users implements OnInit {
     if (this.roleFilter === 'all') return list;
 
     return list.filter((user) => {
-      user.role.toLowerCase().includes(this.roleFilter.toLowerCase());
+      if (!user.role) return false;
+      return user.role.toLowerCase() === this.roleFilter.toLowerCase();
     });
   }
 
@@ -244,11 +257,7 @@ export class Users implements OnInit {
     const start = (this.page - 1) * this.pageSize;
     const end = start + this.pageSize;
 
-    this.paged = this.filtered.slice(start, end).map((user) => {
-      user.birth_date = this.calculateAge(user.birth_date);
-      return user;
-    });
-    
+    this.paged = this.filtered.slice(start, end);
   }
 
   nextPage(): void {
@@ -279,6 +288,8 @@ export class Users implements OnInit {
     this.role = 'user';
     this.birth_date = '';
     this.image = '';
+    this.newPassword = '';
+    this.showPasswordBox = false;
   }
 
   validateForm(): boolean {
@@ -305,6 +316,33 @@ export class Users implements OnInit {
       this.errorMsg = 'Fecha no válida. Formato esperado: YYYY-MM-DD';
       return false;
     }
+    if (!this.editing) {
+      if (!this.newPassword.trim()) {
+        this.errorMsg = 'La contraseña es obligatoria al crear un usuario.';
+        return false;
+      }
+    }
+
+    if (this.editing && this.showPasswordBox) {
+      if (!this.newPassword.trim()) {
+        this.errorMsg = 'Si añades "Nueva contraseña", debes escribirla.';
+        return false;
+      }
+    }
+
+    if (this.newPassword.trim()) {
+      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+      if (!regex.test(this.newPassword)) {
+        this.errorMsg =
+          'La contraseña debe tener mínimo 8 caracteres, mayúscula, minúscula, número y símbolo.';
+        return false;
+      }
+    }
+
+    if (this.role === 'superAdmin' && !this.isSuperAdmin) {
+      this.errorMsg = 'No tienes permisos para asignar rol SuperAdmin.';
+      return false;
+    }
 
     return true;
   }
@@ -316,6 +354,12 @@ export class Users implements OnInit {
       this.updateUser();
     } else {
       this.createUser();
+    }
+  }
+  togglePasswordBox(): void {
+    this.showPasswordBox = !this.showPasswordBox;
+    if (!this.showPasswordBox) {
+      this.newPassword = '';
     }
   }
 
@@ -330,7 +374,11 @@ export class Users implements OnInit {
       birth_date: this.birth_date.trim(),
       image: this.image.trim() ? this.image.trim() : null,
       phone: this.phone.trim(),
+      password: this.newPassword.trim(),
     };
+    if (this.showPasswordBox) {
+      body.password = this.newPassword.trim();
+    }
 
     this.UsersService.create(body).subscribe({
       next: () => {
@@ -350,9 +398,15 @@ export class Users implements OnInit {
   }
 
   startEdit(user: UsersInterface): void {
+    if (!this.canEditUser(user)) {
+      this.errorMsg = 'No tienes permisos para editar este usuario.';
+      return;
+    }
     this.editing = true;
     this.showForm = true;
     this.editId = user.id;
+    this.newPassword = '';
+    this.showPasswordBox = false;
 
     this.first_name = user.first_name != null ? user.first_name : '';
     this.last_name = user.last_name != null ? user.last_name : '';
@@ -372,6 +426,9 @@ export class Users implements OnInit {
   cancelEdit(): void {
     this.editing = false;
     this.editId = null;
+    this.newPassword = '';
+    this.showPasswordBox = false;
+
     this.resetForm();
   }
 
@@ -389,6 +446,9 @@ export class Users implements OnInit {
       image: this.image.trim() ? this.image.trim() : null,
       phone: this.phone.trim(),
     };
+    if (this.showPasswordBox && this.newPassword.trim()) {
+      body.password = this.newPassword.trim();
+    }
 
     this.UsersService.update(this.editId, body).subscribe({
       next: () => {
@@ -408,16 +468,18 @@ export class Users implements OnInit {
       },
     });
   }
-  calculateAge(birth_date: string): string  {
+  calculateAge(birth_date: string): string {
+    if (!birth_date) return '-';
+
     let normalized = birth_date.trim();
     if (normalized.length === 10) {
-      
       normalized = normalized + 'T00:00:00';
     } else {
-      
       normalized = normalized.replace(' ', 'T');
     }
     const dob = new Date(normalized);
+    if (isNaN(dob.getTime())) return '-';
+
     const diff = Date.now() - dob.getTime();
     const ageDate = new Date(diff);
 
@@ -430,7 +492,9 @@ export class Users implements OnInit {
     } else {
       this.selectedUser = user;
       new Date(this.selectedUser.created_at.replace(' ', 'T'));
-      this.selectedUser.birth_date = this.calculateAge(this.selectedUser.birth_date);
+      this.selectedUser.birth_date = this.calculateAge(
+        this.selectedUser.birth_date,
+      );
     }
   }
 
@@ -521,5 +585,43 @@ export class Users implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  isSelf(user: UsersInterface): boolean {
+    if (this.currentUserId === null) return false;
+    return user.id === this.currentUserId;
+  }
+
+  isTargetSuperAdmin(user: UsersInterface): boolean {
+    return user.role === 'superAdmin';
+  }
+
+  canEditUser(user: UsersInterface): boolean {
+    if (this.isSelf(user)) return false;
+
+    if (this.isTargetSuperAdmin(user) && !this.isSuperAdmin) return false;
+
+    return true;
+  }
+
+  canSoftDeactivate(user: UsersInterface): boolean {
+    if (this.isSelf(user)) return false;
+    if (user.role === 'inactive') return false;
+
+    if (this.isTargetSuperAdmin(user) && !this.isSuperAdmin) return false;
+
+    return true;
+  }
+
+  canRestore(user: UsersInterface): boolean {
+    if (this.isSelf(user)) return false;
+    return user.role === 'inactive';
+  }
+
+  canHardDelete(user: UsersInterface): boolean {
+    if (!this.isSuperAdmin) return false;
+    if (this.isSelf(user)) return false;
+
+    return true;
   }
 }

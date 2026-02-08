@@ -51,7 +51,7 @@
       <button class="btn" type="button" (click)="loadClients()" [disabled]="loading">Recargar</button>
 
       <button class="btn btn--primary" type="button" (click)="toggleCreate()">
-        {{ showForm ? 'Cerrar' : 'Crear nuevo cliente' }}
+        {{ showForm ? 'Cerrar' : 'Crear un nuevo cliente' }}
       </button>
     </div>
   </div>
@@ -60,7 +60,7 @@
 
   <div class="alert alert--error" *ngIf="errorMsg">
     {{ errorMsg }}
-    <button class="alert__close" type="button" (click)="successMsg=''">×</button>
+    <button class="alert__close" type="button" (click)="errorMsg=''">×</button>
   </div>
   <div class="alert alert--ok" *ngIf="successMsg">
     {{ successMsg }}

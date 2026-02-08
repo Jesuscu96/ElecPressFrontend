@@ -6,6 +6,6 @@ export interface UsersInterface {
   email: string;
   birth_date: string ;
   created_at: string;
-  image?: string;
+  image?: string | null;
   phone: string;
 }
