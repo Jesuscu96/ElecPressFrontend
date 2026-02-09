@@ -19,6 +19,7 @@ import { Clients } from './components/clients/clients';
 import { HTTP_INTERCEPTORS} from '@angular/common/http';
 import { JwtInterceptor } from './interceptors/jwt-interceptor';
 import { Users } from './components/users/users';
+import { Projects } from './components/projects/projects';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { Users } from './components/users/users';
     NotFound,
     Clients,
     Users,
+    Projects,
   ],
   imports: [
     BrowserModule,

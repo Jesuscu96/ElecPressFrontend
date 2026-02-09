@@ -24,7 +24,7 @@ export class Login {
       next: (res: LoginResponse) => {
         localStorage.setItem('token', res.token);
         localStorage.setItem('user', JSON.stringify(res.user));
-        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard/clients';
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard';
         this.router.navigateByUrl(returnUrl);
         this.loading = false;
 
