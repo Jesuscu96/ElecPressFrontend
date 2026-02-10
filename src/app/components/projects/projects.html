@@ -102,7 +102,8 @@
                 <select class="input select" [(ngModel)]="newProjectClientId" name="id_client">
                     <option value="" disabled>Selecciona cliente</option>
                     <option *ngFor="let c of clients" [value]="c.id">
-                        {{ c.first_name }} {{ c.last_name }}
+                        {{ c.first_name }} {{ c.last_name }} - {{c.company}}
+                        
                     </option>
                 </select>
             </div>
@@ -132,7 +133,7 @@
     <div class="loading" *ngIf="!loading"></div>
 
     <div class="table-wrap">
-        <table class="table" *ngIf="filtered.length && loading; else empty">
+        <table class="table" *ngIf="filtered.length && !loading; else empty">
             <thead>
                 <tr>
                     <th>Proyecto</th>
@@ -171,9 +172,17 @@
                                     Añadir
                                 </a>
 
-                                <button class="btn" *ngIf="p.status !== 'completed'" (click)="openSoftConfirm(p)">
-                                    {{ p.status === 'cancelled' ? 'Pendiente' : 'Borrar' }}
+                                <button class="btn btn--delete" *ngIf="p.status !== 'completed' && p.status !== 'cancelled'"  (click)="openSoftConfirm(p)">
+                                    Borrar
                                 </button>
+                                <button class="btn btn--delete" *ngIf="p.status !== 'completed' && p.status !== 'cancelled'"  (click)="openSoftConfirm(p)">
+                                    Borrar
+                                </button>
+                                    <!-- posible cambio a disabled comentar con el profe que es mejor 
+                                <button class="btn btn--delete" [disabled]=" p.status === 'completed' || p.status === 'cancelled'"  (click)="openSoftConfirm(p)">
+                                    Borrar
+                                </button> -->
+                                
                             </div>
                             <div class="actions" *ngIf="confirmRowId === p.id">
                                 <button class="btn" (click)="cancelConfirm()">Cancelar</button>

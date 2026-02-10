@@ -9,17 +9,23 @@
     <span class="sidebar__text">Home</span>
   </a>
 
-  <a class="sidebar__link" routerLink="/dashboard/clients" routerLinkActive="sidebar__link--active">
+  <a class="sidebar__link" [routerLink]="['/dashboard/clients']" routerLinkActive="sidebar__link--active">
     <i class="fa-solid fa-building sidebar__icon" aria-hidden="true"></i>
     <span class="sidebar__text">Clientes</span>
   </a>
 
-  <a class="sidebar__link" routerLink="/dashboard/users" routerLinkActive="sidebar__link--active">
+  <a class="sidebar__link" [routerLink]="['/dashboard/users']" routerLinkActive="sidebar__link--active">
     <i class="fa-solid fa-users sidebar__icon" aria-hidden="true"></i>
     <span class="sidebar__text">Usuarios</span>
   </a>
 
-  <a class="sidebar__link" routerLink="/dashboard/material" routerLinkActive="sidebar__link--active">
+  <a class="sidebar__link" [routerLink]="['/dashboard/projects']" routerLinkActive="sidebar__link--active">
+    <i class="fas fa-briefcase" aria-hidden="true"></i>
+    <span class="sidebar__text">Projecto</span>
+    
+    
+  </a>
+  <a class="sidebar__link" [routerLink]="['/dashboard/material']" routerLinkActive="sidebar__link--active">
     <i class="fa-solid fa-box sidebar__icon" aria-hidden="true"></i>
     <span class="sidebar__text">Materiales</span>
   </a>

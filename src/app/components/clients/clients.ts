@@ -70,8 +70,8 @@ export class Clients implements OnInit {
     //this.successMsg = '';
 
     this.clientsService.index().subscribe({
-      next: (data) => {
-        this.clients = data || [];
+      next: (value) => {
+        this.clients = value || [];
         this.applyFilter();
       },
       error: (err) => {

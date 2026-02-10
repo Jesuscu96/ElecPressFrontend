@@ -24,7 +24,7 @@ export class Projects implements OnInit {
   search: string = '';
   statusFilter: string = 'all';
 
-  orderMode: string = 'created_at_desc';
+  orderMode: string = 'default';
 
   currentPage: number = 1;
   pageSize: number = 5;
@@ -52,8 +52,8 @@ export class Projects implements OnInit {
 
   loadClients(): void {
     this.clientsService.index().subscribe({
-      next: (res: ClientInterface[]) => {
-        this.clients = res;
+      next: (value: ClientInterface[]) => {
+        this.clients = value;
       },
       error: (err) => {
         this.errorMsg = err || 'Error cargando clientes';
@@ -67,8 +67,8 @@ export class Projects implements OnInit {
 
   loadProjects(): void {
     this.projectsService.index().subscribe({
-      next: (res: ProjectInterface[]) => {
-        this.projects = res;
+      next: (value: ProjectInterface[]) => {
+        this.projects = value;
         this.applyFilters();
         this.loading = true;
         this.errorMsg = "";
@@ -86,23 +86,23 @@ export class Projects implements OnInit {
   applyFilters(): void {
     const text = this.search.trim().toLowerCase();
 
-    let tmp: ProjectInterface[] = [...this.projects];
+    let list: ProjectInterface[] = [...this.projects];
 
     if (this.statusFilter !== 'all') {
-      tmp = tmp.filter((p) => p.status === this.statusFilter);
+      list = list.filter((project) => project.status === this.statusFilter);
     }
 
     if (text.length > 0) {
-      tmp = tmp.filter((p) => {
-        const name = p.name ? p.name.toLowerCase() : '';
-        const client = p.client_name ? p.client_name.toLowerCase() : '';
+      list = list.filter((project) => {
+        const name = project.name ? project.name.toLowerCase() : '';
+        const client = project.client_name ? project.client_name.toLowerCase() : '';
         return name.includes(text) || client.includes(text);
       });
     }
 
-    tmp.sort((a, b) => this.sorter(a, b));
+    list.sort((a, b) => this.sorter(a, b));
 
-    this.filtered = tmp;
+    this.filtered = list;
 
     this.currentPage = 1;
     this.updatePaged();
@@ -180,20 +180,6 @@ export class Projects implements OnInit {
     this.applyFilters();
   }
 
-  
-
-
-  confirmAction(): void {
-    if (this.confirmProject === null || this.confirmType === '') {
-      this.cancelConfirm();
-      return;
-    }
-
-    if (this.confirmType === 'toggleStatus') {
-      this.shoftDeleteProject(this.confirmProject);
-    }
-    this.cancelConfirm();
-  }
 
   toggleCreate(): void {
     this.showCreate = !this.showCreate;
@@ -208,16 +194,19 @@ export class Projects implements OnInit {
   validateForm(): any {
     this.errorMsg = '';
     this.successMsg = '';
-
+    console.log('entrado');
+    
+    console.log(this.newProjectName);
+    
     if (
       !this.newProjectName.trim() ||
-      !this.newProjectBudget.trim() ||
+      !this.newProjectBudget ||
       !this.newProjectClientId.trim()
     ) {
-      this.errorMsg = 'Rellena nombre del proyecto, Presupuesto, Cliente.';
+      this.errorMsg = 'Rellena nombre del Proyecto, Presupuesto y Cliente.';
       return false;
     }
-    const budgetValue = Number(this.newProjectBudget.trim());
+    const budgetValue = Number(this.newProjectBudget);
     if (isNaN(budgetValue)) {
       this.errorMsg = 'El presupuesto debe ser un número.';
       this.loading = false;
@@ -228,17 +217,20 @@ export class Projects implements OnInit {
       this.errorMsg = 'Cliente inválido.';
       return false;
     }
+    
+    this.createProject(budgetValue, clientId);
 
-    this.createProject(budgetValue);
+    return true;
+
   }
   
 
-  createProject(budgetValue:number): void {
+  createProject(budgetValue:number, clientId: number): void {
     this.loading = true;
 
     const payload: any = {
       name: this.newProjectName.trim(),
-      id_client: this.newProjectClientId.trim(),
+      id_client: clientId,
       budget: budgetValue,
       status: 'development',
     };
@@ -274,6 +266,17 @@ export class Projects implements OnInit {
     this.confirmType = '';
     this.confirmMessage = '';
     this.confirmButtonText = '';
+  }
+  confirmAction(): void {
+    if (this.confirmProject === null || this.confirmType === '') {
+      this.cancelConfirm();
+      return;
+    }
+
+    if (this.confirmType === 'toggleStatus') {
+      this.shoftDeleteProject(this.confirmProject);
+    }
+    this.cancelConfirm();
   }
 
   shoftDeleteProject(project: ProjectInterface): void {
