@@ -1,234 +1,221 @@
 <section class="page">
+    <div class="header">
+        <div class="header__left">
+            <h1>Proyectos</h1>
+        </div>
 
-  <div class="header">
-    <div class="header__left">
-      <h1>Proyectos</h1>
+        <div class="header__center">
+            <input class="input input--search" type="text" [(ngModel)]="search" (input)="applyFilters()"
+                placeholder="Buscar por proyecto o cliente..." />
+        </div>
+
+        <div class="header__right">
+            <div class="filters">
+                <label class="radio">
+                    <input type="radio" name="order" [(ngModel)]="orderMode" value="default"
+                        (change)="applyFilters()" />
+                    Por defecto
+                </label>
+
+                <label class="radio">
+                    <input type="radio" name="order" [(ngModel)]="orderMode" value="name" (change)="applyFilters()" />
+                    Nombre
+                </label>
+
+                <label class="radio">
+                    <input type="radio" name="order" [(ngModel)]="orderMode" value="created_at"
+                        (change)="applyFilters()" />
+                    Fecha
+                </label>
+            </div>
+
+            <div class="filters">
+                <label class="radio">
+                    <input type="radio" name="pstatus" [(ngModel)]="statusFilter" value="development"
+                        (change)="applyFilters()" />
+                    development
+                </label>
+
+                <label class="radio">
+                    <input type="radio" name="pstatus" [(ngModel)]="statusFilter" value="pending"
+                        (change)="applyFilters()" />
+                    pending
+                </label>
+
+                <label class="radio">
+                    <input type="radio" name="pstatus" [(ngModel)]="statusFilter" value="completed"
+                        (change)="applyFilters()" />
+                    completed
+                </label>
+
+                <label class="radio">
+                    <input type="radio" name="pstatus" [(ngModel)]="statusFilter" value="cancelled"
+                        (change)="applyFilters()" />
+                    cancelled
+                </label>
+
+                <label class="radio">
+                    <input type="radio" name="pstatus" [(ngModel)]="statusFilter" value="all"
+                        (change)="applyFilters()" />
+                    Todos
+                </label>
+            </div>
+
+            <button class="btn" type="button" (click)="search=''; resetFilters()">
+                Limpiar
+            </button>
+            <button class="btn" type="button" (click)="loadProjects()" [disabled]="loading">
+                Recargar
+            </button>
+
+            <button class="btn btn--primary" type="button" (click)="toggleCreate()">
+                {{ showCreate ? 'Cerrar' : 'Crear un nuevo proyecto' }}
+            </button>
+        </div>
     </div>
 
-    <div class="header__center">
-      <input
-        class="input input--search"
-        type="text"
-        [(ngModel)]="search"
-        (input)="applyFilters()"
-        placeholder="Buscar por proyecto o cliente..."
-      />
+    <div class="alert alert--error" *ngIf="errorMsg">
+        {{ errorMsg }}
+        <button class="alert__close" type="button" (click)="errorMsg=''">×</button>
     </div>
 
-    <div class="header__right">
-
-      <!-- ORDEN -->
-      <div class="filters">
-        <label class="radio">
-          <input type="radio" name="order" [(ngModel)]="orderMode" value="default" (change)="applyFilters()">
-          Por defecto
-        </label>
-
-        <label class="radio">
-          <input type="radio" name="order" [(ngModel)]="orderMode" value="name" (change)="applyFilters()">
-          Nombre
-        </label>
-
-        <label class="radio">
-          <input type="radio" name="order" [(ngModel)]="orderMode" value="created_at" (change)="applyFilters()">
-          Fecha
-        </label>
-      </div>
-
-      <!-- STATUS -->
-      <div class="filters">
-        <label class="radio">
-          <input type="radio" name="pstatus" [(ngModel)]="statusFilter" value="development" (change)="applyFilters()">
-          development
-        </label>
-
-        <label class="radio">
-          <input type="radio" name="pstatus" [(ngModel)]="statusFilter" value="pending" (change)="applyFilters()">
-          pending
-        </label>
-
-        <label class="radio">
-          <input type="radio" name="pstatus" [(ngModel)]="statusFilter" value="completed" (change)="applyFilters()">
-          completed
-        </label>
-
-        <label class="radio">
-          <input type="radio" name="pstatus" [(ngModel)]="statusFilter" value="cancelled" (change)="applyFilters()">
-          cancelled
-        </label>
-
-        <label class="radio">
-          <input type="radio" name="pstatus" [(ngModel)]="statusFilter" value="all" (change)="applyFilters()">
-          Todos
-        </label>
-      </div>
-
-      <button class="btn" type="button" (click)="search=''; resetFilters()">Limpiar</button>
-      <button class="btn" type="button" (click)="loadProjects()" [disabled]="loading">Recargar</button>
-
-      <button class="btn btn--primary" type="button" (click)="toggleCreate()">
-        {{ showForm ? 'Cerrar' : 'Crear un nuevo proyecto' }}
-      </button>
-    </div>
-  </div>
-
-  <!-- ALERTAS -->
-  <div class="alert alert--error" *ngIf="errorMsg">
-    {{ errorMsg }}
-    <button class="alert__close" type="button" (click)="errorMsg=''">×</button>
-  </div>
-
-  <div class="alert alert--ok" *ngIf="successMsg">
-    {{ successMsg }}
-    <button class="alert__close" type="button" (click)="successMsg=''">×</button>
-  </div>
-
-  <!-- FORM CREAR -->
-  <div class="card clients-card" *ngIf="showForm">
-    <div class="card__header">
-      <h2>Nuevo proyecto</h2>
+    <div class="alert alert--ok" *ngIf="successMsg">
+        {{ successMsg }}
+        <button class="alert__close" type="button" (click)="successMsg=''">
+            ×
+        </button>
     </div>
 
-    <div class="form-grid">
-      <div>
-        <label>Nombre del proyecto *</label>
-        <input class="input" [(ngModel)]="name" name="name" />
-      </div>
+    <div class="card clients-card" *ngIf="showCreate">
+        <div class="card__header">
+            <h2>Nuevo proyecto</h2>
+        </div>
 
-      <div>
-        <label>Cliente *</label>
-        <select class="input select" [(ngModel)]="id_client" name="id_client">
-          <option value="">Selecciona cliente</option>
-          <option *ngFor="let c of clients" [value]="c.id">
-            {{ c.first_name }} {{ c.last_name }}
-          </option>
+        <div class="form-grid">
+            <div>
+                <label>Nombre del proyecto *</label>
+                <input class="input" [(ngModel)]="newProjectName" name="name" />
+            </div>
+
+            <div>
+                <label>Cliente *</label>
+                <select class="input select" [(ngModel)]="newProjectClientId" name="id_client">
+                    <option value="" disabled>Selecciona cliente</option>
+                    <option *ngFor="let c of clients" [value]="c.id">
+                        {{ c.first_name }} {{ c.last_name }}
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label>Presupuesto </label>
+                <input class="input" type="number" [(ngModel)]="newProjectBudget" name="budget" />
+            </div>
+
+            <div>
+                <label>Estado (auto)</label>
+                <input class="input" value="development" disabled />
+            </div>
+        </div>
+
+        <br />
+
+        <div class="actions">
+            <button class="btn btn--primary" (click)="validateForm()" [disabled]="loading || !newProjectName || !newProjectClientId || !newProjectBudget">
+                Crear
+            </button>
+        </div>
+    </div>
+
+    <h2>Listado</h2>
+
+    <div class="loading" *ngIf="!loading"></div>
+
+    <div class="table-wrap">
+        <table class="table" *ngIf="filtered.length && loading; else empty">
+            <thead>
+                <tr>
+                    <th>Proyecto</th>
+                    <th>Cliente</th>
+                    <th>Presupuesto</th>
+                    <th>Status</th>
+                    <th>Fecha Alta</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <ng-container *ngFor="let p of paged">
+                    <tr>
+                        <td>{{ p.name }}</td>
+                        <td>{{ p.client_name }}</td>
+                        <td>{{ p.budget || '-' }}</td>
+                        <td>{{ p.status }}</td>
+                        <td>{{ p.created_at | date:'dd/MM/yyyy' }}</td>
+
+                        <td>
+                            <div class="actions" *ngIf="confirmRowId !== p.id">
+                                <a class="btn btn--info" [routerLink]="['/dashboard/projects-detail', p.id]"
+                                    [queryParams]="{ mode: 'info' }">
+                                    +Info
+                                </a>
+
+                                <a class="btn btn--edit" *ngIf="p.status !== 'cancelled' && p.status !== 'completed'"
+                                    [routerLink]="['/dashboard/projects-detail', p.id]"
+                                    [queryParams]="{ mode: 'edit' }">
+                                    Editar
+                                </a>
+
+                                <a class="btn" *ngIf="p.status === 'development'"
+                                    [routerLink]="['/dashboard/projects-detail', p.id]" [queryParams]="{ mode: 'add' }">
+                                    Añadir
+                                </a>
+
+                                <button class="btn" *ngIf="p.status !== 'completed'" (click)="openSoftConfirm(p)">
+                                    {{ p.status === 'cancelled' ? 'Pendiente' : 'Borrar' }}
+                                </button>
+                            </div>
+                            <div class="actions" *ngIf="confirmRowId === p.id">
+                                <button class="btn" (click)="cancelConfirm()">Cancelar</button>
+                                <button class="btn btn--delete" (click)="confirmAction()">
+                                    {{ confirmButtonText }}
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr *ngIf="confirmRowId === p.id" class="confirm-row">
+                        <td colspan="6">
+                            <div class="confirm-box">
+                                <span class="confirm-text">{{ confirmMessage }}</span>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+
+        <ng-template #empty>
+            <p class="muted" *ngIf="!loading">No hay proyectos.</p>
+        </ng-template>
+    </div>
+
+    <div class="pagination" *ngIf="totalPages >= 1">
+        <button class="btn" (click)="prevPage()" [disabled]="currentPage === 1">
+            Anterior
+        </button>
+
+        <span>Página {{ currentPage }} / {{ totalPages }}</span>
+
+        <button class="btn" (click)="nextPage()" [disabled]="currentPage === totalPages">
+            Siguiente
+        </button>
+
+        <select class="input" [(ngModel)]="pageSize" (ngModelChange)="changePageSize($event)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="20">20</option>
+            <option [ngValue]="50">50</option>
         </select>
-      </div>
-
-      <div>
-        <label>Presupuesto (opcional)</label>
-        <input class="input" type="number" [(ngModel)]="budget" name="budget" />
-      </div>
-
-      <div>
-        <label>Status (auto)</label>
-        <input class="input" value="development" disabled />
-      </div>
     </div>
-
-    <br>
-
-    <div class="actions">
-      <button class="btn btn--primary" (click)="createProject()" [disabled]="loading || !name || !id_client">
-        Crear
-      </button>
-    </div>
-  </div>
-
-  <!-- LISTADO -->
-  <h2>Listado</h2>
-
-  <div class="loading" *ngIf="loading">Cargando...</div>
-
-  <div class="table-wrap">
-    <table class="table" *ngIf="filtered.length && !loading; else empty">
-      <thead>
-        <tr>
-          <th>Proyecto</th>
-          <th>Cliente</th>
-          <th>Presupuesto</th>
-          <th>Status</th>
-          <th>Fecha Alta</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <ng-container *ngFor="let p of paged">
-          <tr>
-            <td>{{ p.name }}</td>
-            <td>{{ p.client_name }}</td>
-            <td>{{ p.budget || '-' }}</td>
-            <td>{{ p.status }}</td>
-            <td>{{ p.created_at | date:'dd/MM/yyyy' }}</td>
-
-            <td>
-              <div class="actions" *ngIf="confirmRowId !== p.id">
-
-                <!-- INFO -->
-                <a class="btn btn--info"
-                   [routerLink]="['/dashboard/projects-detail', p.id]"
-                   [queryParams]="{ mode: 'info' }">
-                  +Info
-                </a>
-
-                <!-- EDITAR: oculto si cancelled o completed -->
-                <a class="btn btn--edit"
-                   *ngIf="p.status !== 'cancelled' && p.status !== 'completed'"
-                   [routerLink]="['/dashboard/projects-detail', p.id]"
-                   [queryParams]="{ mode: 'edit' }">
-                  Editar
-                </a>
-
-                <!-- AÑADIR: solo development -->
-                <a class="btn"
-                   *ngIf="p.status === 'development'"
-                   [routerLink]="['/dashboard/projects-detail', p.id]"
-                   [queryParams]="{ mode: 'add' }">
-                  Añadir
-                </a>
-
-                <!-- Soft delete / Reactivar -->
-                <button class="btn"
-                        *ngIf="p.status !== 'completed'"
-                        (click)="openSoftConfirm(p)">
-                  {{ p.status === 'cancelled' ? 'Pendiente' : 'Borrar' }}
-                </button>
-
-              </div>
-
-              <!-- confirm actions -->
-              <div class="actions" *ngIf="confirmRowId === p.id">
-                <button class="btn" (click)="cancelConfirm()">Cancelar</button>
-                <button class="btn btn--delete" (click)="confirmAction()">
-                  {{ confirmButtonText }}
-                </button>
-              </div>
-            </td>
-          </tr>
-
-          <tr *ngIf="confirmRowId === p.id" class="confirm-row">
-            <td colspan="6">
-              <div class="confirm-box">
-                <span class="confirm-text">{{ confirmMessage }}</span>
-              </div>
-            </td>
-          </tr>
-
-        </ng-container>
-      </tbody>
-
-    </table>
-
-    <ng-template #empty>
-      <p class="muted" *ngIf="!loading">No hay proyectos.</p>
-    </ng-template>
-  </div>
-
-  
-  <div class="pagination" *ngIf="totalPages >= 1">
-    <button class="btn" (click)="prevPage()" [disabled]="page === 1">Anterior</button>
-
-    <span>Página {{ page }} / {{ totalPages }}</span>
-
-    <button class="btn" (click)="nextPage()" [disabled]="page === totalPages">Siguiente</button>
-
-    <select class="input" [(ngModel)]="pageSize" (ngModelChange)="changePageSize($event)">
-      <option [ngValue]="5">5</option>
-      <option [ngValue]="10">10</option>
-      <option [ngValue]="20">20</option>
-      <option [ngValue]="50">50</option>
-    </select>
-  </div>
-
 </section>
