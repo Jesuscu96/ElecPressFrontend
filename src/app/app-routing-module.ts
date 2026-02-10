@@ -9,6 +9,8 @@ import { Users } from './components/users/users';
 import { Material } from './components/material/material';
 import { NotFound } from './components/not-found/not-found';
 import { Clients } from './components/clients/clients';
+import { Projects } from './components/projects/projects';
+import { ProjectsDetail } from './components/projects-detail/projects-detail'; 
 import { AuthGuard } from './guards/auth-guard';
 
 
@@ -53,7 +55,15 @@ const routes: Routes = [
       },
       { path: 'clients',
         component: Clients 
-      }
+      },
+      {
+        path: 'projects',
+        component: Projects,
+      },
+      {
+        path: 'projects-detail/:id',
+        component: ProjectsDetail,
+      },
 
     ],
   },

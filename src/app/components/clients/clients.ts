@@ -103,8 +103,7 @@ export class Clients implements OnInit {
     this.confirmType = 'hard';
     this.confirmClient = c;
 
-    this.confirmMessage =
-      'Vas a borrar PERMANENTEMENTE. Esta acción no se puede deshacer. ¿Continuar?';
+    this.confirmMessage = 'Vas a borrar PERMANENTEMENTE. Esta acción no se puede deshacer. ¿Continuar?';
     this.confirmButtonText = 'Borrar permanentemente';
   }
 
