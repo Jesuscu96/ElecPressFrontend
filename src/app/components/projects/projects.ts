@@ -128,11 +128,18 @@ export class Projects implements OnInit {
     }
 
    
-    if (this.orderMode === 'created_at') {
-      const at = a.created_at ? new Date(a.created_at).getTime() : 0;
-      const bt = b.created_at ? new Date(b.created_at).getTime() : 0;
+    if (this.orderMode === 'created_at_asc') {
+      const at = a.created_at; 
+      const bt = b.created_at; 
       if (at > bt) return 1;
       if (at < bt) return -1;
+      return 0;
+    }
+    if (this.orderMode === 'created_at_dsc') {
+      const at = a.created_at; 
+      const bt = b.created_at; 
+      if (at < bt) return 1;
+      if (at > bt) return -1;
       return 0;
     }
 

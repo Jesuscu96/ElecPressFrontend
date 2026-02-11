@@ -11,6 +11,7 @@
 
         <div class="header__right">
             <div class="filters">
+                Orden:
                 <label class="radio">
                     <input type="radio" name="order" [(ngModel)]="orderMode" value="default"
                         (change)="applyFilters()" />
@@ -23,13 +24,19 @@
                 </label>
 
                 <label class="radio">
-                    <input type="radio" name="order" [(ngModel)]="orderMode" value="created_at"
+                    <input type="radio" name="order" [(ngModel)]="orderMode" value="created_at_asc"
                         (change)="applyFilters()" />
-                    Fecha
+                    Fecha ↑
+                </label>
+                <label class="radio">
+                    <input type="radio" name="order" [(ngModel)]="orderMode" value="created_at_dsc"
+                        (change)="applyFilters()" />
+                    Fecha ↓
                 </label>
             </div>
 
             <div class="filters">
+                Filtro:
                 <label class="radio">
                     <input type="radio" name="pstatus" [(ngModel)]="statusFilter" value="development"
                         (change)="applyFilters()" />
@@ -175,13 +182,13 @@
                                 <button class="btn btn--delete" *ngIf="p.status !== 'completed' && p.status !== 'cancelled'"  (click)="openSoftConfirm(p)">
                                     Borrar
                                 </button>
-                                <button class="btn btn--delete" *ngIf="p.status !== 'completed' && p.status !== 'cancelled'"  (click)="openSoftConfirm(p)">
-                                    Borrar
-                                </button>
-                                    <!-- posible cambio a disabled comentar con el profe que es mejor 
+                                <!-- posible cambio a disabled comentar con el profe que es mejor 
                                 <button class="btn btn--delete" [disabled]=" p.status === 'completed' || p.status === 'cancelled'"  (click)="openSoftConfirm(p)">
                                     Borrar
                                 </button> -->
+                                <button class="btn" *ngIf="p.status === 'cancelled'"  (click)="openSoftConfirm(p)">
+                                    Pendiente
+                                </button>
                                 
                             </div>
                             <div class="actions" *ngIf="confirmRowId === p.id">

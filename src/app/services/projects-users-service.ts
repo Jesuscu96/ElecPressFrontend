@@ -10,7 +10,7 @@ export class ProjectsUsersService {
   private endpoint = 'project-users';
   constructor(private api: ApiService) {}
 
-  index(): Observable<ProjectsUsersInterface[]> { return this.api.getAll<ProjectsUsersInterface[]>(this.endpoint); }
+  index(id_project: number): Observable<ProjectsUsersInterface[]> { return this.api.getAll<ProjectsUsersInterface[]>(`${this.endpoint}?id_project=${id_project}`); }
   show(id: number): Observable<ProjectsUsersInterface> { return this.api.getById<ProjectsUsersInterface>(this.endpoint, id); }
   create(body: any): Observable<ProjectsUsersInterface> { return this.api.create<ProjectsUsersInterface>(this.endpoint, body); }
   update(id: number, body: any): Observable<ProjectsUsersInterface> { return this.api.update<ProjectsUsersInterface>(this.endpoint, id, body); }

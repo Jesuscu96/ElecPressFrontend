@@ -7,8 +7,8 @@
     </div>
 
     <div class="navbar__right">
-        <button class="btn" type="button" (click)="toggleFont()">A</button>
-        <button class="btn" type="button" (click)="toggleTheme()">Tema</button>
+        <button class="btn" type="button" (click)="toggleFont()"><i class="fa-solid fa-text-height"></i></button>
+        <button class="btn" type="button" (click)="toggleTheme()"><i class="fa-solid fa-circle-half-stroke"></i></button>
         <span class="navbar__user" *ngIf="isLoggedIn && userLabel">
             {{ userLabel }}
             <span class="navbar__role" *ngIf="roleLabel">· {{ roleLabel }}</span>
