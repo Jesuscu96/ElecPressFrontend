@@ -13,6 +13,7 @@
 
     <div class="header__right">
       <div class="filters">
+        Orden:
         <label class="radio">
           <input type="radio" name="order" [(ngModel)]="orderMode" value="default" (change)="applyFilter()">
           Por defecto
@@ -31,6 +32,7 @@
 
 
       <div class="filters">
+        Filtro:
         <label class="radio">
           <input type="radio" name="status" [(ngModel)]="statusFilter" value="active" (change)="applyFilter()" />
           Activos
@@ -59,10 +61,12 @@
 
 
   <div class="alert alert--error" *ngIf="errorMsg">
+    <i class="fa-solid fa-circle-info"></i>
     {{ errorMsg }}
     <button class="alert__close" type="button" (click)="errorMsg=''">×</button>
   </div>
   <div class="alert alert--ok" *ngIf="successMsg">
+    <i class="fa-solid fa-circle-info"></i>
     {{ successMsg }}
     <button class="alert__close" type="button" (click)="successMsg=''">×</button>
   </div>
@@ -187,7 +191,10 @@
 
     </table>
     <ng-template #empty>
-      <p class="muted" *ngIf="!loading">No hay clientes.</p>
+      <p class="muted" *ngIf="!loading">
+        <i class="fa-solid fa-circle-info"></i>
+        No hay clientes.
+      </p>
     </ng-template>
   </div>
 

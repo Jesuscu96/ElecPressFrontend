@@ -312,6 +312,8 @@ export class Users implements OnInit {
       this.errorMsg = 'Email no válido.';
       return false;
     }
+    console.log(this.birth_date);
+    
     if (!/^\d{4}-\d{2}-\d{2}$/.test(this.birth_date)) {
       this.errorMsg = 'Fecha no válida. Formato esperado: YYYY-MM-DD';
       return false;
@@ -522,14 +524,17 @@ export class Users implements OnInit {
         this.successMsg = `Usuario ${user.first_name} ${user.last_name} dado de baja.`;
         this.selectedUser = null;
         this.loadUsers();
+        console.log('next');
       },
       error: (err) => {
-        this.errorMsg =
-          err?.error?.message || 'Error al dar de baja al usuario';
+        this.errorMsg = err?.error?.message || 'Error al dar de baja al usuario';
         this.loading = false;
+        console.log('Error al dar de baja al usuario');
+        
       },
       complete: () => {
         this.loading = false;
+        console.log('complete');
       },
     });
   }

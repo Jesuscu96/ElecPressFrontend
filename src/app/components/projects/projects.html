@@ -82,11 +82,13 @@
     </div>
 
     <div class="alert alert--error" *ngIf="errorMsg">
+        <i class="fa-solid fa-circle-info"></i>
         {{ errorMsg }}
         <button class="alert__close" type="button" (click)="errorMsg=''">×</button>
     </div>
 
     <div class="alert alert--ok" *ngIf="successMsg">
+        <i class="fa-solid fa-circle-info"></i>
         {{ successMsg }}
         <button class="alert__close" type="button" (click)="successMsg=''">
             ×
@@ -212,7 +214,10 @@
         </table>
 
         <ng-template #empty>
-            <p class="muted" *ngIf="!loading">No hay proyectos.</p>
+            <p class="muted" *ngIf="!loading">
+                <i class="fa-solid fa-circle-info"></i>
+                No hay proyectos.
+            </p>
         </ng-template>
     </div>
 

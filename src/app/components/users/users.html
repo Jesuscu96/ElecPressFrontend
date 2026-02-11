@@ -14,6 +14,7 @@
     <div class="header__right">
       <div class="filters">
         <label class="radio">
+          Orden
           <input type="radio" name="order" [(ngModel)]="orderMode" value="default" (change)="applyFilter()">
           Por defecto
         </label>
@@ -36,6 +37,7 @@
 
 
       <div class="filters">
+        Filtro
         <label class="radio">
           <input type="radio" name="status" [(ngModel)]="roleFilter" value="user" (change)="applyFilter()" />
           Usuarios
@@ -72,19 +74,21 @@
 
 
   <div class="alert alert--error" *ngIf="errorMsg">
+    <i class="fa-solid fa-circle-info"></i>
     {{ errorMsg }}
     <button class="alert__close" type="button" (click)="errorMsg=''">×</button>
   </div>
   <div class="alert alert--ok" *ngIf="successMsg">
+    <i class="fa-solid fa-circle-info"></i>
     {{ successMsg }}
     <button class="alert__close" type="button" (click)="successMsg=''">×</button>
   </div>
 
 
 
-  <div class="card clients-card" *ngIf="showForm">
+  <div class="card users-card" *ngIf="showForm">
     <div class="card__header">
-      <h2>{{ editing ? 'Editar cliente' : 'Nuevo cliente' }}</h2>
+      <h2>{{ editing ? 'Editar usuario' : 'Nuevo usuario' }}</h2>
     </div>
 
     <div class="form-grid">
@@ -100,7 +104,7 @@
 
       <div>
         <label>Fecha de nacimiento</label>
-        <input class="input" [(ngModel)]="birth_date" name="birth_date" />
+        <input class="input" type="date" [(ngModel)]="birth_date" name="birth_date" />
       </div>
 
       <div>
@@ -154,7 +158,7 @@
 
   <h2>Listado</h2>
 
-  <div class="loading" *ngIf="loading">Cargando...</div>
+  <div class="loading" *ngIf="loading"></div>
   <div class="table-wrap">
     <table class="table" *ngIf="filtered.length && !loading; else empty">
       <thead>
@@ -222,7 +226,10 @@
 
     </table>
     <ng-template #empty>
-      <p class="muted" *ngIf="!loading">No hay usuarios.</p>
+      <p class="muted" *ngIf="!loading">
+        <i class="fa-solid fa-circle-info"></i>
+        No hay usuarios.
+      </p>
     </ng-template>
   </div>
 
@@ -248,7 +255,7 @@
 
 
 
-  <div class="card clients-card" *ngIf="selectedUser">
+  <div class="card users-card" *ngIf="selectedUser">
     <div class="card__header">
       <h2>Detalle de cliente</h2>
       <button class="btn" (click)="closeInfo()">Cerrar</button>

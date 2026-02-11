@@ -412,21 +412,21 @@ export class Clients implements OnInit {
     this.selectedClient = null;
   }
 
-  softDeleteClient(c: ClientInterface): void {
+  softDeleteClient(client: ClientInterface): void {
     this.loading = true;
     this.errorMsg = '';
     this.successMsg = '';
 
     const body: any = {
-      first_name: c.first_name,
-      last_name: c.last_name,
-      company: c.company ?? null,
-      phone: c.phone,
-      email: c.email,
+      first_name: client.first_name,
+      last_name: client.last_name,
+      company: client.company ?? null,
+      phone: client.phone,
+      email: client.email,
       status: 'inactive',
     };
 
-    this.clientsService.update(c.id, body).subscribe({
+    this.clientsService.update(client.id, body).subscribe({
       next: () => {
         this.successMsg = 'Cliente dado de baja.';
         this.selectedClient = null;
@@ -442,21 +442,21 @@ export class Clients implements OnInit {
     });
   }
 
-  restoreClient(c: ClientInterface): void {
+  restoreClient(client: ClientInterface): void {
     this.loading = true;
     this.errorMsg = '';
     this.successMsg = '';
 
     const body: any = {
-      first_name: c.first_name,
-      last_name: c.last_name,
-      company: c.company ?? null,
-      phone: c.phone,
-      email: c.email,
+      first_name: client.first_name,
+      last_name: client.last_name,
+      company: client.company ?? null,
+      phone: client.phone,
+      email: client.email,
       status: 'active',
     };
 
-    this.clientsService.update(c.id, body).subscribe({
+    this.clientsService.update(client.id, body).subscribe({
       next: () => {
         this.successMsg = 'Cliente dado de alta.';
         this.selectedClient = null;
@@ -472,12 +472,12 @@ export class Clients implements OnInit {
     });
   }
 
-  hardDeleteClient(c: ClientInterface): void {
+  hardDeleteClient(client: ClientInterface): void {
     this.loading = true;
     this.errorMsg = '';
     this.successMsg = '';
 
-    this.clientsService.delete(c.id).subscribe({
+    this.clientsService.delete(client.id).subscribe({
       next: () => {
         this.successMsg = 'Cliente eliminado permanentemente.';
         this.selectedClient = null;
