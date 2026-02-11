@@ -6,7 +6,20 @@
 
         <div class="header__right">
             <a [routerLink]="['dashboard/projects']" class="btn">volver</a>
+            <button class="btn" type="button" (click)="loadProject()">Recargar</button>
         </div>
-
     </div>
+    <div class="alert alert--error" *ngIf="errorMsg">
+        <i class="fa-solid fa-circle-info"></i>
+        {{errorMsg}}
+        <button class="alert__close" type="button">x</button>
+    </div>
+    <div class="alert alert--ok">
+        <i class="fa-solid fa-circle-info"></i>
+        {{successMsg}}
+        <button class="alert__close" type="button">x</button>
+    </div>
+    <div class="loading" *ngIf="loading"></div>
+
+    <div class="card clients-card" *ngIf=""></div>
 </section>

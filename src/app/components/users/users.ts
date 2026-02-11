@@ -312,7 +312,7 @@ export class Users implements OnInit {
       this.errorMsg = 'Email no válido.';
       return false;
     }
-    console.log(this.birth_date);
+    //console.log(this.birth_date);
     
     if (!/^\d{4}-\d{2}-\d{2}$/.test(this.birth_date)) {
       this.errorMsg = 'Fecha no válida. Formato esperado: YYYY-MM-DD';
