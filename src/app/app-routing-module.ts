@@ -12,6 +12,7 @@ import { Clients } from './components/clients/clients';
 import { Projects } from './components/projects/projects';
 import { ProjectsDetail } from './components/projects-detail/projects-detail'; 
 import { AuthGuard } from './guards/auth-guard';
+import { ProjectsEdit } from './components/projects-edit/projects-edit';
 
 
 const routes: Routes = [
@@ -64,6 +65,11 @@ const routes: Routes = [
         path: 'projects-detail/:id',
         component: ProjectsDetail,
       },
+      {
+        path: 'projects-edit/:id',
+        component: ProjectsEdit,
+      },
+           
 
     ],
   },

@@ -165,21 +165,14 @@
 
                         <td>
                             <div class="actions" *ngIf="confirmRowId !== p.id">
-                                <a class="btn btn--info" [routerLink]="['/dashboard/projects-detail', p.id]"
-                                    [queryParams]="{ mode: 'info' }">
+                                <a class="btn btn--info" [routerLink]="['/dashboard/projects-detail', p.id]">
                                     +Info
                                 </a>
 
-                                <a class="btn btn--edit" *ngIf="p.status !== 'cancelled' && p.status !== 'completed'"
-                                    [routerLink]="['/dashboard/projects-detail', p.id]"
-                                    [queryParams]="{ mode: 'edit' }">
+                                <button class="btn btn--edit" [disabled]="p.status === 'cancelled' || p.status === 'completed'"
+                                    [routerLink]="['/dashboard/projects-edit', p.id]">
                                     Editar
-                                </a>
-
-                                <a class="btn" *ngIf="p.status === 'development'"
-                                    [routerLink]="['/dashboard/projects-detail', p.id]" [queryParams]="{ mode: 'add' }">
-                                    Añadir
-                                </a>
+                                </button>
 
                                 <button class="btn btn--delete" *ngIf="p.status !== 'completed' && p.status !== 'cancelled'"  (click)="openSoftConfirm(p)">
                                     Borrar

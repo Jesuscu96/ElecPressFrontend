@@ -153,6 +153,12 @@ button, input, select, textarea { font: inherit; }
   border-color: var(--btn-delete-border);
 }
 
+.btn--disabled{
+  opacity: 0.55;
+  pointer-events: none; 
+  transform: none;
+}
+
 .card{
   background: var(--surface);
   border: 1px solid var(--border);
