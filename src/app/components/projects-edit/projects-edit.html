@@ -14,12 +14,56 @@
         {{errorMsg}}
         <button class="alert__close" type="button">x</button>
     </div>
-    <div class="alert alert--ok">
+    <div class="alert alert--ok"*ngIf="successMsg">
         <i class="fa-solid fa-circle-info"></i>
         {{successMsg}}
         <button class="alert__close" type="button">x</button>
     </div>
     <div class="loading" *ngIf="loading"></div>
 
-    <div class="card clients-card" *ngIf=""></div>
+    <div class="card projects-card" *ngIf="!loading">
+        <div class="card__header">
+            <h2>Datos del proyecto</h2>
+        </div>
+
+        <div class="form-grid">
+            <div>
+                <label>Nombre *</label>
+                <input class="input" [(ngModel)]="name" name="name" />
+            </div>
+
+            <div>
+                <label>Cliente *</label>
+                <select class="input select" [(ngModel)]="id_client" name="id_client">
+                    <option value="" disabled>Selecciona cliente</option>
+                    <option *ngFor="let client of clients" [ngValue]="client.id">
+                        {{ client.first_name }} {{ client.last_name }} {{client.company ? ' - ' + client.company : ''}}
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label>Presupuesto *</label>
+                <input class="input" type="number" [(ngModel)]="budget" name="budget" />
+            </div>
+
+            <div>
+                <label>Status *</label>
+                <select class="input select" [(ngModel)]="status" name="status">
+                    <option value="pending">pending</option>
+                    <option value="development">development</option>
+                    <option value="completed">completed</option>
+                    <option value="cancelled">cancelled</option>
+                </select>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="actions">
+            <button class="btn btn--primary" type="button" (click)="validateAndSave()" [disabled]="loading">
+                Guardar
+            </button>
+        </div>
+    </div>
 </section>

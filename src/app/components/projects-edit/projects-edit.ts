@@ -57,7 +57,6 @@ export class ProjectsEdit implements OnInit {
   loadProject(): void {
     this.loading = true;
     this.errorMsg = '';
-    this.successMsg = '';
 
     this.projectsService.show(this.projectId).subscribe({
       next: (value) => {
@@ -118,11 +117,11 @@ export class ProjectsEdit implements OnInit {
 
     this.projectsService.update(this.projectId, body).subscribe({
       next: () => {
-        this.successMsg = 'Proyecto actualizado.';
+        this.successMsg = `Proyecto actualizado ${body.name}.`;
         this.loadProject();
       },
       error: (err) => {
-        this.errorMsg = 'Error actualizando el proyecto';
+        this.errorMsg = `Error actualizando el proyecto ${body.name}`;
         this.loading = false;
         console.error(err);
       },

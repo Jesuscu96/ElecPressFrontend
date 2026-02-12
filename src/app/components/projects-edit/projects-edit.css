@@ -1,0 +1,70 @@
+:host { display: block; }
+
+.page { 
+  display: grid; 
+  gap: 16px;
+  min-width: 0;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 16px 24px;
+}
+
+.card { width: 100%; }
+
+.projects-card{
+  padding: 20px;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  align-items: end;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.header__right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+
+.form-grid label {
+  display: block;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.form-grid .input {
+  width: 80%;
+}
+
+.form-grid .select {
+  width: 80%;
+}
+
+.actions .btn { margin: 3px; }
+
+@media (max-width: 700px) {
+  .header {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  .header__right{
+    justify-content: flex-start;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

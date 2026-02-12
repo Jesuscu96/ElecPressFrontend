@@ -110,8 +110,8 @@
                 <label>Cliente *</label>
                 <select class="input select" [(ngModel)]="newProjectClientId" name="id_client">
                     <option value="" disabled>Selecciona cliente</option>
-                    <option *ngFor="let c of clients" [value]="c.id">
-                        {{ c.first_name }} {{ c.last_name }} - {{c.company}}
+                    <option *ngFor="let client of clients" [value]="client.id">
+                        {{ client.first_name }} {{ client.last_name }}  {{client.company ? ' - ' + client.company : ''}}
                         
                     </option>
                 </select>
