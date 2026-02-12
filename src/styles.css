@@ -231,7 +231,7 @@ button, input, select, textarea { font: inherit; }
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  width: 30%;
+  width: 35%;
   padding: 12px 14px;
   border-radius: 12px;
   border: 1px solid var(--border);

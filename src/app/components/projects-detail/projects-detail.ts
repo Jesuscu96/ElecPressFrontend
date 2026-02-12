@@ -22,6 +22,9 @@ export class ProjectsDetail implements OnInit {
   mode: string = 'info';
 
   loading: boolean = false;
+  loadingUsers: boolean = false;
+  loadingMaterials: boolean = false;
+  loadingEquipment: boolean = false;
   errorMsg: string = '';
   successMsg: string = '';
 
@@ -51,27 +54,25 @@ export class ProjectsDetail implements OnInit {
       return;
     }
 
-    this.loadAll();
-  }
-
-  loadAll(): void {
-    this.loading = true;
-    this.errorMsg = '';
-    this.successMsg = '';
-
     this.loadProject();
     this.loadProjectUsers();
     this.loadProjectMaterials();
     this.loadProjectEquipments();
   }
 
+  
+
   loadProject(): void {
+    this.loading = true;
     this.projectsService.show(this.projectId).subscribe({
-      next: (res: ProjectInterface) => {
-        this.project = res;
+      next: (value: ProjectInterface) => {
+        this.project = value;
       },
       error: (err) => {
-        this.errorMsg = err || 'Error cargando el proyecto';
+        this.errorMsg = 'Error cargando el proyecto';
+        console.error(err);
+        this.loading= false;
+        
       },
       complete: () => {
         this.loading = false;
@@ -81,30 +82,38 @@ export class ProjectsDetail implements OnInit {
 
   loadProjectUsers(): void {
     this.projectsUsersService.index(this.projectId).subscribe({
-      next: (res: ProjectsUsersInterface[]) => {
-        this.users = res;
+      next: (value) => {
+        this.users = value;
       },
-      error: () => {},
+      error: (err) => {
+        console.error(err);
+        
+      },
       complete: () => {},
     });
   }
 
   loadProjectMaterials(): void {
     this.projectsMaterialsService.index(this.projectId).subscribe({
-      next: (res: ProjectsMaterialsInterface[]) => {
-        this.materials = res;
+      next: (value) => {
+        this.materials = value;
       },
-      error: () => {},
+      error: (err) => {
+        console.error(err);
+        
+      },
       complete: () => {},
     });
   }
 
   loadProjectEquipments(): void {
     this.projectsEquipmentsService.index(this.projectId).subscribe({
-      next: (res: ProjectsEquipmentInterface[]) => {
-        this.equipments = res;
+      next: (value) => {
+        this.equipments = value;
       },
-      error: () => {},
+      error: (err) => {
+        console.error(err);        
+      },
       complete: () => {},
     });
   }

@@ -5,23 +5,23 @@
         </div>
 
         <div class="header__right">
-            <a [routerLink]="['dashboard/projects']" class="btn">volver</a>
+            <a [routerLink]="['/dashboard/projects']" class="btn">volver</a>
             <button class="btn" type="button" (click)="loadProject()">Recargar</button>
         </div>
     </div>
     <div class="alert alert--error" *ngIf="errorMsg">
         <i class="fa-solid fa-circle-info"></i>
         {{errorMsg}}
-        <button class="alert__close" type="button">x</button>
+        <button class="alert__close" type="button" (click)="errorMsg=''">x</button>
     </div>
     <div class="alert alert--ok"*ngIf="successMsg">
         <i class="fa-solid fa-circle-info"></i>
         {{successMsg}}
-        <button class="alert__close" type="button">x</button>
+        <a [routerLink]="['/dashboard/projects']" class="btn"(click)="successMsg=''" >volver</a>
     </div>
     <div class="loading" *ngIf="loading"></div>
 
-    <div class="card projects-card" *ngIf="!loading">
+    <div class="card projects-card" *ngIf="!loading && !successMsg">
         <div class="card__header">
             <h2>Datos del proyecto</h2>
         </div>

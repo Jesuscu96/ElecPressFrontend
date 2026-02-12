@@ -22,6 +22,7 @@ import { Users } from './components/users/users';
 import { Projects } from './components/projects/projects';
 import { ProjectsDetail } from './components/projects-detail/projects-detail';
 import { ProjectsEdit } from './components/projects-edit/projects-edit';
+import { ProjectsAddMaterials } from './components/projects-add-materials/projects-add-materials';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { ProjectsEdit } from './components/projects-edit/projects-edit';
     Projects,
     ProjectsDetail,
     ProjectsEdit,
+    ProjectsAddMaterials,
   ],
   imports: [
     BrowserModule,
