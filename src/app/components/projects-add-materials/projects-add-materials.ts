@@ -21,7 +21,7 @@ export class ProjectsAddMaterials  implements OnInit{
   
   
   ngOnInit(): void {
-    this.loadMaterials();
+    //this.loadMaterials();
   }
 
 }

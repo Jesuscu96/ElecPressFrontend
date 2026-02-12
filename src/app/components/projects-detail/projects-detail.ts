@@ -21,7 +21,7 @@ export class ProjectsDetail implements OnInit {
   projectId: number = 0;
   mode: string = 'info';
 
-  loading: boolean = false;
+  loadingProjects: boolean = false;
   loadingUsers: boolean = false;
   loadingMaterials: boolean = false;
   loadingEquipment: boolean = false;
@@ -63,7 +63,7 @@ export class ProjectsDetail implements OnInit {
   
 
   loadProject(): void {
-    this.loading = true;
+    this.loadingProjects = true;
     this.projectsService.show(this.projectId).subscribe({
       next: (value: ProjectInterface) => {
         this.project = value;
@@ -71,50 +71,62 @@ export class ProjectsDetail implements OnInit {
       error: (err) => {
         this.errorMsg = 'Error cargando el proyecto';
         console.error(err);
-        this.loading= false;
+        this.loadingProjects = false;
         
       },
       complete: () => {
-        this.loading = false;
+        this.loadingProjects = false;
       },
     });
   }
 
   loadProjectUsers(): void {
+    this.loadingUsers = true;
     this.projectsUsersService.index(this.projectId).subscribe({
       next: (value) => {
         this.users = value;
       },
       error: (err) => {
         console.error(err);
+        this.loadingUsers = false;
         
       },
-      complete: () => {},
+      complete: () => {
+        this.loadingUsers = false;
+      },
     });
   }
 
   loadProjectMaterials(): void {
+    this.loadingMaterials = true;
     this.projectsMaterialsService.index(this.projectId).subscribe({
       next: (value) => {
         this.materials = value;
       },
       error: (err) => {
         console.error(err);
+        this.loadingMaterials = false;
         
       },
-      complete: () => {},
+      complete: () => {
+        this.loadingMaterials = false;
+      },
     });
   }
 
   loadProjectEquipments(): void {
+    this.loadingEquipment = true;
     this.projectsEquipmentsService.index(this.projectId).subscribe({
       next: (value) => {
         this.equipments = value;
       },
       error: (err) => {
-        console.error(err);        
+        console.error(err);
+        this.loadingEquipment = false;     
       },
-      complete: () => {},
+      complete: () => {
+        this.loadingEquipment = false;
+      },
     });
   }
 }

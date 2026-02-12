@@ -6,7 +6,7 @@
     </div>
 
     <div class="header__right">
-      <button class="btn" type="button" (click)="loadAll()" [disabled]="loading">Recargar</button>
+      <button class="btn" type="button" (click)="loadProject()" [disabled]="loadingProjects">Recargar</button>
       <a class="btn" [routerLink]="['/dashboard/projects']">Volver</a>
     </div>
   </div>
@@ -21,10 +21,10 @@
     <button class="alert__close" type="button" (click)="successMsg=''">×</button>
   </div>
 
-  <div class="loading" *ngIf="loading"></div>
+  <div class="loading" *ngIf="loadingProjects"></div>
 
   
-  <div class="card clients-card" *ngIf="project && !loading">
+  <div class="card projects-card" *ngIf="project && !loadingProjects">
     <div class="card__header">
       <h2>Información</h2>
     </div>
@@ -34,86 +34,107 @@
       <div><b>Cliente:</b> {{ project.client_name || '-' }}</div>
       <div><b>Presupuesto:</b> {{ project.budget }}</div>
       <div><b>Status:</b> {{ project.status }}</div>
-      <div><b>Creado:</b> {{ project.created_at }}</div>
+      <div><b>Creado:</b> {{ project.created_at | date:'dd/MM/yyyy' }}</div>
+    </div>
+  </div>
+  
+
+ 
+   <div class="card projects-card">
+    <div class="card__header">
+      <h2>Users asignados</h2>
+    </div>
+
+    <div class="loading" *ngIf="loadingUsers"></div>
+
+    <div class="table-wrap" *ngIf="!loadingUsers">
+      <table class="table" *ngIf="users.length; else emptyUsers">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of users">
+            <td>{{ u.user_name }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <ng-template #emptyUsers>
+        <p class="muted">No hay users asignados.</p>
+      </ng-template>
     </div>
   </div>
 
- 
-  <h2>Usuarios asignados</h2>
-  <div class="table-wrap">
-    <table class="table" *ngIf="users.length && !loading; else emptyUsers">
-      <thead>
-        <tr>
-          <th>Usuario</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let u of users">
-          <td>{{ u.user_name }}</td>
-        </tr>
-      </tbody>
-    </table>
 
-    <ng-template #emptyUsers>
-      <p class="muted" *ngIf="!loading">No hay usuarios asignados.</p>
-    </ng-template>
+  <div class="card projects-card">
+    <div class="card__header">
+      <h2>Materiales</h2>
+    </div>
+
+    <div class="loading" *ngIf="loadingMaterials"></div>
+
+    <div class="table-wrap" *ngIf="!loadingMaterials">
+      <table class="table" *ngIf="materials.length; else emptyMaterials">
+        <thead>
+          <tr>
+            <th>Imagen</th>
+            <th>Material</th>
+            <th>Cantidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let m of materials">
+            <td>
+              <img *ngIf="m.material_image" class="thumb" [src]="m.material_image" alt="img">
+              <span *ngIf="!m.material_image">-</span>
+            </td>
+            <td>{{ m.material_name }}</td>
+            <td>{{ m.material_quantity }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <ng-template #emptyMaterials>
+        <p class="muted">No hay materiales asignados.</p>
+      </ng-template>
+    </div>
   </div>
 
   
-  <h2>Materiales</h2>
-  <div class="table-wrap">
-    <table class="table" *ngIf="materials.length && !loading; else emptyMaterials">
-      <thead>
-        <tr>
-          <th>Imagen</th>
-          <th>Material</th>
-          <th>Cantidad</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let m of materials">
-          <td>
-            <img *ngIf="m.material_image" [src]="m.material_image" alt="material" class="thumb">
-            <span *ngIf="!m.material_image">-</span>
-          </td>
-          <td>{{ m.material_name }}</td>
-          <td>{{ m.material_quantity }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="card projects-card">
+    <div class="card__header">
+      <h2>Equipment</h2>
+    </div>
 
-    <ng-template #emptyMaterials>
-      <p class="muted" *ngIf="!loading">No hay materiales asignados.</p>
-    </ng-template>
-  </div>
+    <div class="loading" *ngIf="loadingEquipment"></div>
 
-  
-  <h2>Equipamiento</h2>
-  <div class="table-wrap">
-    <table class="table" *ngIf="equipments.length && !loading; else emptyEquip">
-      <thead>
-        <tr>
-          <th>Imagen</th>
-          <th>Equipo</th>
-          <th>Cantidad</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let e of equipments">
-          <td>
-            <img *ngIf="e.equipment_image" [src]="e.equipment_image" alt="equipo" class="thumb">
-            <span *ngIf="!e.equipment_image">-</span>
-          </td>
-          <td>{{ e.equipment_name }}</td>
-          <td>{{ e.quantity }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-wrap" *ngIf="!loadingEquipment">
+      <table class="table" *ngIf="equipments.length; else emptyEquipment">
+        <thead>
+          <tr>
+            <th>Imagen</th>
+            <th>Equipo</th>
+            <th>Cantidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let e of equipments">
+            <td>
+              <img *ngIf="e.equipment_image" class="thumb" [src]="e.equipment_image" alt="img">
+              <span *ngIf="!e.equipment_image">-</span>
+            </td>
+            <td>{{ e.equipment_name }}</td>
+            <td>{{ e.quantity || '-' }}</td>
+          </tr>
+        </tbody>
+      </table>
 
-    <ng-template #emptyEquip>
-      <p class="muted" *ngIf="!loading">No hay equipamiento asignado.</p>
-    </ng-template>
+      <ng-template #emptyEquipment>
+        <p class="muted">No hay equipment asignado.</p>
+      </ng-template>
+    </div>
   </div>
 
 </section>
-

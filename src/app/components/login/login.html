@@ -1,6 +1,6 @@
 <h1 class="auth__title">Login</h1>
 
-<form class="form" (ngSubmit)="submit()">
+<form class="form" >
   <div class="field">
     <label class="label">Email</label>
     <input class="input" type="email" [(ngModel)]="email" name="email"  />
@@ -13,9 +13,9 @@
 
   <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
 
-  <button class="btn btn--primary" type="submit" [disabled]="loading">
+  <button class="btn btn--primary" type="submit" (click)="validateForm()" [disabled]="loading">
     {{ loading ? 'Entrando...' : 'Entrar' }}
   </button>
 
-  <a class="link" routerLink="/auth/register">Crear cuenta</a>
+  
 </form>

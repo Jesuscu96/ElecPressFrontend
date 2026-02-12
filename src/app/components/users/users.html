@@ -177,7 +177,10 @@
       <tbody>
         <ng-container *ngFor="let user of paged">
           <tr [class.inactive]="user.role === 'inactive'">
-            <td>{{ user.image }}</td>
+            <td>
+              <img *ngIf="user.image" [src]="user.image" alt="material" class="thumb">
+              <span *ngIf="!user.image">-</span>
+            </td>
             <td>{{ user.first_name }} {{ user.last_name }}</td>
             <td>{{ calculateAge(user.birth_date)}}</td>
             <td>{{ user.email || '-' }}</td>

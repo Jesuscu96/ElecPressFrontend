@@ -15,15 +15,30 @@ export class Login {
   loading: boolean = false;
 
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {}
+  validateForm(): boolean  {
+    this.errorMsg = "";
+    if(!this.email.trim()) {
+      this.errorMsg = "El email es obligatorio "
+      return false;
+    }
+    if(this.password.trim().length < 8) {
+      this.errorMsg += "la contraseña es obligatoria escribela bien "
+      return false;
+    }
+    this.submit()
+    return true;
+
+  }
 
   submit() {
+    if(!this.validateForm()) return;
     this.errorMsg = '';
     this.loading = true;
 
-    this.authService.login({ email: this.email, password: this.password }).subscribe({
-      next: (res: LoginResponse) => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('user', JSON.stringify(res.user));
+    this.authService.login({ email: this.email.trim(), password: this.password.trim() }).subscribe({
+      next: (value: LoginResponse) => {
+        localStorage.setItem('token', value.token);
+        localStorage.setItem('user', JSON.stringify(value.user));
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard';
         this.router.navigateByUrl(returnUrl);
         this.loading = false;
@@ -31,7 +46,7 @@ export class Login {
       },
       error: (err) => {
         this.errorMsg =  'Error al iniciar sesión';
-        console.log(err);
+        console.error(err);
         
         this.loading = false;
       },
