@@ -42,13 +42,11 @@ export class UiPreferencesService {
   }
 
   private applyToDom(): void {
-    const root = document.documentElement; 
+    const root = document.documentElement;
 
-    
     if (this.theme === 'dark') root.classList.add('theme-dark');
     else root.classList.remove('theme-dark');
 
-    
     root.classList.remove('font-md');
     root.classList.remove('font-lg');
     if (this.font === 'lg') root.classList.add('font-lg');

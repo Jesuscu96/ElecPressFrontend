@@ -4,6 +4,7 @@ export interface ProjectsMaterialsInterface {
   project_name: string;
   material_id: number;
   material_name: string;
-  material_image: any;
-  material_quantity: string;
+  material_image: string | null;
+  material_quantity: number;
+  material_id_category: number;
 }
