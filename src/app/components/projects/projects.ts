@@ -201,9 +201,10 @@ export class Projects implements OnInit {
   validateForm(): any {
     this.errorMsg = '';
     this.successMsg = '';
-    console.log('entrado');
     
-    console.log(this.newProjectName);
+    //console.log('entrado');
+    
+    //console.log(this.newProjectName);
     
     if (
       !this.newProjectName.trim() ||

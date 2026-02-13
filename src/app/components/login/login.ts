@@ -31,7 +31,7 @@ export class Login {
   }
 
   submit() {
-    if(!this.validateForm()) return;
+    
     this.errorMsg = '';
     this.loading = true;
 

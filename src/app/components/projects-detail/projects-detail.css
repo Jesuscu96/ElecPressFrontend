@@ -30,10 +30,21 @@
   padding: 16px;
 }
 
-.table-wrap{
-  width: 100%;
-  overflow-x: auto;
+.table { width: 100%; border-collapse: collapse; }
+
+.table th, .table td {
+  text-align: left;
+  vertical-align: middle;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
 }
+
+.table th:last-child,
+.table td:last-child { text-align: center; }
+
+.table-wrap { width: 100%; overflow-x: auto;}
+
+
 
 .detail-grid{
   display: grid;
@@ -47,6 +58,7 @@
   object-fit: cover;
   border-radius: 10px;
   border: 1px solid var(--border);
+  display: block;
 }
 
 @media (max-width: 700px) {

@@ -13,6 +13,7 @@ import { Projects } from './components/projects/projects';
 import { ProjectsDetail } from './components/projects-detail/projects-detail'; 
 import { AuthGuard } from './guards/auth-guard';
 import { ProjectsEdit } from './components/projects-edit/projects-edit';
+import { ProjectsAddMaterials } from './components/projects-add-materials/projects-add-materials';
 
 
 const routes: Routes = [
@@ -68,6 +69,10 @@ const routes: Routes = [
       {
         path: 'projects-edit/:id',
         component: ProjectsEdit,
+      },
+      {
+        path: 'projects-add-material/:id',
+        component: ProjectsAddMaterials,
       },
            
 

@@ -9,9 +9,9 @@ import { Material } from '../material/material';
   styleUrl: './projects-add-materials.css',
 })
 export class ProjectsAddMaterials  implements OnInit{
-  materials: Material[] = [];
-  filtered: Material[] = [];
-  paged: Material[] = [];
+  materials: ProjectsMaterialsInterface[] = [];
+  filtered: ProjectsMaterialsInterface[] = [];
+  paged: ProjectsMaterialsInterface[] = [];
 
   loading: boolean = false;
   successMsg: string = '';
