@@ -71,7 +71,7 @@ const routes: Routes = [
         component: ProjectsEdit,
       },
       {
-        path: 'projects-add-material/:id',
+        path: 'projects-add-materials/:id',
         component: ProjectsAddMaterials,
       },
            

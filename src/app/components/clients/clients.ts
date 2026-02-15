@@ -71,7 +71,7 @@ export class Clients implements OnInit {
 
     this.clientsService.index().subscribe({
       next: (value) => {
-        this.clients = value || [];
+        this.clients = value;
         this.applyFilter();
       },
       error: (err) => {

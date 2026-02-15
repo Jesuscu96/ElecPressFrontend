@@ -52,11 +52,13 @@ export class Projects implements OnInit {
 
   loadClients(): void {
     this.clientsService.index().subscribe({
-      next: (value: ClientInterface[]) => {
+      next: (value) => {
         this.clients = value;
       },
       error: (err) => {
-        this.errorMsg = err || 'Error cargando clientes';
+        this.errorMsg =  'Error cargando clientes';
+        console.error(err);
+        
         //this.loading = false;
       },
       complete: () => {
@@ -67,14 +69,16 @@ export class Projects implements OnInit {
 
   loadProjects(): void {
     this.projectsService.index().subscribe({
-      next: (value: ProjectInterface[]) => {
+      next: (value) => {
         this.projects = value;
         this.applyFilters();
         this.loading = true;
         this.errorMsg = "";
       },
       error: (err) => {
-        this.errorMsg = err || 'Error cargando proyectos';
+        this.errorMsg = 'Error cargando proyectos';
+        console.error(err);
+        
         this.loading = false;
       },
       complete: () => {
