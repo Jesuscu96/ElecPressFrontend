@@ -172,12 +172,15 @@ export class ProjectsAddMaterials implements OnInit {
     this.errorMsg = '';
     this.successMsg = '';
 
-    let qty: number = 1;
-    if (this.qtyAdd[material.id]) {
-      qty = Number(this.qtyAdd[material.id]);
+    let quantity: number = 1;
+
+    const valueFromInput = this.qtyAdd[material.id];
+
+    if (valueFromInput !== undefined && valueFromInput !== null) {
+      quantity = Number(valueFromInput);
     }
 
-    if (isNaN(qty) || qty <= 0) {
+    if (isNaN(quantity) || quantity <= 0) {
       this.errorMsg = 'La cantidad debe ser mayor que 0.';
       return;
     }
@@ -185,9 +188,9 @@ export class ProjectsAddMaterials implements OnInit {
     const body = {
       project_id: this.projectId,
       material_id: material.id,
-      quantity: qty,
+      quantity: quantity,
     };
-
+    console.log('POST project-materials body:', body);
     this.projectMaterialsService.create(body).subscribe({
       next: () => {
         this.successMsg = 'Material añadido al proyecto.';
@@ -201,5 +204,55 @@ export class ProjectsAddMaterials implements OnInit {
     });
   }
 
-  //  saveQuantity / deleteAssigned los hacemos luego
+  saveQuantity(projectMaterial: ProjectsMaterialsInterface): void {
+    this.errorMsg = '';
+    this.successMsg = '';
+
+    const newQuantity = Number(this.qtyEdit[projectMaterial.id]);
+
+    if (isNaN(newQuantity) || newQuantity <= 0) {
+      this.errorMsg = 'La cantidad debe ser mayor que 0.';
+      return;
+    }
+
+    const body = {
+      quantity: newQuantity,
+    };
+
+    this.projectMaterialsService.update(projectMaterial.id, body).subscribe({
+      next: () => {
+        this.successMsg = 'Cantidad actualizada.';
+        this.loadAssigned();
+      },
+      error: (err) => {
+        console.error(err);
+        this.errorMsg = 'Error actualizando cantidad.';
+      },
+    });
+  }
+
+  openConfirm(projectMaterial: ProjectsMaterialsInterface): void {
+    this.confirmRowId = projectMaterial.id;
+  }
+
+  cancelConfirm(): void {
+    this.confirmRowId = null;
+  }
+
+  deleteAssigned(projectMaterial: ProjectsMaterialsInterface): void {
+    this.errorMsg = '';
+    this.successMsg = '';
+
+    this.projectMaterialsService.delete(projectMaterial.id).subscribe({
+      next: () => {
+        this.successMsg = 'Material eliminado del proyecto.';
+        this.confirmRowId = null;
+        this.loadAssigned();
+      },
+      error: (err) => {
+        console.error(err);
+        this.errorMsg = 'Error eliminando material del proyecto.';
+      },
+    });
+  }
 }

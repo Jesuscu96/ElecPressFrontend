@@ -1,31 +1,92 @@
+<section class="page">
 
-<div class="card projects-card">
-    <div class="catalog-wrap">
-        <div class="card__header__left">
-            <h2>Catálogo</h2>
+    <div class="card projects-card">
+        <div class="card__header">
+            <h2>Ya asignados</h2>
         </div>
 
-        
-        <div class="catalog-header__center">
-            <input class="input input--search" type="text" [(ngModel)]="search" (input)="applyFilters()"
-                placeholder="Buscar material..." />
-        </div>
-        
-        <div class="catalog-header__right">
-            <select class="input" [(ngModel)]="selectedCategory" (change)="applyFilters()">
-                <option value="all">Todas</option>
-                <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-            </select>
-        
-            <button class="btn" type="button" (click)="search=''; selectedCategory='all'; applyFilters()">
-                Limpiar
-            </button>
-        </div>
-        
+        <div class="loading" *ngIf="loadingAssigned"></div>
 
+        <div class="table-wrap" *ngIf="!loadingAssigned">
+            <table class="table" *ngIf="assigned.length; else emptyAssigned">
+                <thead>
+                    <tr>
+                        <th>Material</th>
+                        <th>Cantidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <ng-container *ngFor="let pm of assigned">
+                        <tr>
+                            <td>{{ pm.material_name }}</td>
+
+                            <td>
+                                <input class="input input--qty" type="number" min="1" [(ngModel)]="qtyEdit[pm.id]" />
+                            </td>
+
+                            <td>
+                                <button class="btn btn--edit" type="button" (click)="saveQuantity(pm)">
+                                    Guardar
+                                </button>
+
+                                <button class="btn btn--delete" type="button" (click)="openConfirm(pm)">
+                                    Borrar
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="confirmRowId === pm.id" class="confirm-row">
+                            <td colspan="3">
+                                <div class="confirm-box">
+                                    <span class="confirm-text">¿Quitar este material del proyecto?</span>
+                                    <div class="confirm-actions">
+                                        <button class="btn" type="button" (click)="cancelConfirm()">Cancelar</button>
+                                        <button class="btn btn--delete" type="button" (click)="deleteAssigned(pm)">
+                                            Confirmar
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+
+            <ng-template #emptyAssigned>
+                <p class="muted">No hay materiales asignados.</p>
+            </ng-template>
+        </div>
+    </div>
+
+    <div class="card projects-card">
+        <div class="catalog-header">
+            <div class="catalog-header__left">
+                <h2>Catálogo</h2>
+            </div>
+
+
+            <div class="catalog-header__center">
+                <input class="input input--search" type="text" [(ngModel)]="search" (input)="applyFilters()"
+                    placeholder="Buscar material..." />
+            </div>
+
+            <div class="catalog-header__right">
+                <select class="input" [(ngModel)]="selectedCategory" (change)="applyFilters()">
+                    <option value="all">Todas</option>
+                    <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+                </select>
+
+                <button class="btn" type="button" (click)="search=''; selectedCategory='all'; applyFilters()">
+                    Limpiar
+                </button>
+            </div>
+
+        </div>
         <div class="loading" *ngIf="loadingMaterials"></div>
 
-        
+
         <div class="catalog-grid" *ngIf="paged.length && !loadingMaterials; else emptyCatalog">
             <div class="catalog-card card" *ngFor="let m of paged">
                 <div class="catalog-card__img">
@@ -52,7 +113,7 @@
             <p class="muted" *ngIf="!loadingMaterials">No hay materiales.</p>
         </ng-template>
 
-        
+
         <div class="pagination" *ngIf="totalPages >= 1">
             <button class="btn" (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
             <span>Página {{ currentPage }} / {{ totalPages }}</span>
@@ -64,5 +125,6 @@
                 <option [ngValue]="24">24</option>
             </select>
         </div>
+
     </div>
-</div>
+</section>
