@@ -14,7 +14,7 @@
     <div class="header__right">
       <div class="filters">
         <label class="radio">
-          Orden
+          Orden:
           <input type="radio" name="order" [(ngModel)]="orderMode" value="default" (change)="applyFilter()">
           Por defecto
         </label>
@@ -37,8 +37,8 @@
 
 
       <div class="filters">
-        Filtro
         <label class="radio">
+          Filtro:
           <input type="radio" name="status" [(ngModel)]="roleFilter" value="user" (change)="applyFilter()" />
           Usuarios
         </label>
@@ -134,10 +134,11 @@
         <label>Contraseña *</label>
         <input class="input" type="password" [(ngModel)]="newPassword" name="newPassword" />
       </div>
-
+      
       <button class="btn select" type="button" *ngIf="editing" (click)="togglePasswordBox()">
         {{ showPasswordBox ? 'Cancelar contraseña' : 'Nueva contraseña' }}
       </button>
+
       <div  *ngIf="editing && showPasswordBox">
         <label>Nueva contraseña *</label>
         <input class="input" type="password" [(ngModel)]="newPassword" name="newPassword" />
@@ -260,11 +261,13 @@
 
   <div class="card users-card" *ngIf="selectedUser">
     <div class="card__header">
-      <h2>Detalle de cliente</h2>
+      <h2>Detalle del Usuario</h2>
       <button class="btn" (click)="closeInfo()">Cerrar</button>
-    </div>
+    </div> <br>
+  
 
     <div class="detail-grid">
+      <img *ngIf="selectedUser.image" [src]="selectedUser.image" alt="material" class="thumb-detail">
       <div><b>Nombre:</b> {{ selectedUser.first_name }} {{ selectedUser.last_name }}</div>
       <div><b>Edad:</b> {{ calculateAge(selectedUser.birth_date) }}</div>
       <div><b>Email:</b> {{ selectedUser.email }}</div>

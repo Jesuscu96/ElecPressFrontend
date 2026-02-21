@@ -51,11 +51,17 @@
       <table class="table" *ngIf="users.length; else emptyUsers">
         <thead>
           <tr>
+            <th>Imagen</th>
             <th>Nombre</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let u of users">
+           
+            <td>
+              <img *ngIf="u.user_image" class="thumb" [src]="u.user_image" alt="img">
+              <span *ngIf="!u.user_image">-</span>
+            </td>
             <td>{{ u.user_name }}</td>
           </tr>
         </tbody>

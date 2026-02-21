@@ -1,1 +1,145 @@
-<p>projects-add-users works!</p>
+<section class="page">
+
+
+    <div class="card projects-card">
+        <div class="card__header">
+            <h2>Ya asignados</h2>
+        </div>
+
+        <div class="loading" *ngIf="loadingAssigned"></div>
+
+        <div class="table-wrap" *ngIf="!loadingAssigned">
+            <table class="table" *ngIf="assigned.length; else emptyAssigned">
+                <thead>
+                    <tr>
+                        <th>Foto</th>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <ng-container *ngFor="let a of assigned">
+                        <tr>
+                            <td>
+                                <img *ngIf="a.user_image" class="thumb" [src]="a.user_image" alt="img" />
+                                <span *ngIf="!a.user_image">-</span>
+                            </td>
+                            <td>{{ a.user_name }}</td>
+                            <td>
+                                <div class="actions" *ngIf="confirmRowId !== a.id">
+                                    <button class="btn btn--delete" type="button" (click)="openConfirm(a)">
+                                        Quitar
+                                    </button>
+                                </div>
+
+                                <div class="actions" *ngIf="confirmRowId === a.id">
+                                    <button class="btn" type="button" (click)="cancelConfirm()">Cancelar</button>
+                                    <button class="btn btn--delete" type="button"
+                                        (click)="deleteAssigned(a)">Confirmar</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="confirmRowId === a.id" class="confirm-row">
+                            <td colspan="3">
+                                <div class="confirm-box">
+                                    <span class="confirm-text">¿Quitar este usuario del proyecto?</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+
+            <ng-template #emptyAssigned>
+                <p class="muted">No hay usuarios asignados.</p>
+            </ng-template>
+        </div>
+    </div>
+
+
+    <div class="alert alert--error" *ngIf="errorMsg">
+        {{ errorMsg }}
+        <button class="alert__close" type="button" (click)="errorMsg=''">×</button>
+    </div>
+
+    <div class="alert alert--ok" *ngIf="successMsg">
+        {{ successMsg }}
+        <button class="alert__close" type="button" (click)="successMsg=''">×</button>
+    </div>
+
+
+    <div class="card projects-card">
+        <div class="catalog-header">
+            <div class="catalog-header__left">
+                <h2>Usuarios disponibles</h2> <br>
+            </div>
+
+            <div class="catalog-header__center">
+                <input class="input input--search" type="text" [(ngModel)]="search" (input)="applyFilters()"
+                    placeholder="Buscar por nombre..." />
+            </div>
+
+            <div class="catalog-header__right">
+                <label>Orden:</label>
+                <select class="input" [(ngModel)]="orderMode" (change)="applyFilters()">
+                    <option value="default">Por defecto</option>
+                    <option value="name_asc">Nombre A-Z</option>
+                    <option value="name_desc">Nombre Z-A</option>
+                </select>
+
+                <button class="btn" type="button" (click)="search=''; orderMode='default'; applyFilters()">
+                    Limpiar
+                </button>
+            </div>
+        </div>
+
+        <div class="loading" *ngIf="loadingUsers"></div>
+
+        <div class="table-wrap" *ngIf="!loadingUsers">
+            <table class="table" *ngIf="filtered.length; else emptyUsers">
+                <thead>
+                    <tr>
+                        <th>Foto</th>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let u of paged">
+                        <td>
+                            <img *ngIf="u.image" class="thumb" [src]="u.image" alt="img" />
+                            <span *ngIf="!u.image">-</span>
+                        </td>
+
+                        <td>{{ u.first_name }} {{ u.last_name }}</td>
+
+                        <td>
+                            <button class="btn btn--primary" type="button" (click)="addUser(u)">
+                                Añadir
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <ng-template #emptyUsers>
+                <p class="muted">No hay usuarios disponibles.</p>
+            </ng-template>
+        </div>
+
+        <div class="pagination" *ngIf="totalPages >= 1">
+            <button class="btn" (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+            <span>Página {{ currentPage }} / {{ totalPages }}</span>
+            <button class="btn" (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+
+            <select class="input" [(ngModel)]="pageSize" (ngModelChange)="changePageSize($event)">
+                <option [ngValue]="5">5</option>
+                <option [ngValue]="10">10</option>
+                <option [ngValue]="20">20</option>
+            </select>
+        </div>
+    </div>
+</section>

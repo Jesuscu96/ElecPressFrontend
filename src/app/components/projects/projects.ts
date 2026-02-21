@@ -59,10 +59,10 @@ export class Projects implements OnInit {
         this.errorMsg =  'Error cargando clientes';
         console.error(err);
         
-        //this.loading = false;
+        ;
       },
       complete: () => {
-        //this.loading = false;
+        
       },
     });
   }
@@ -256,7 +256,8 @@ export class Projects implements OnInit {
         this.loadProjects();
       },
       error: (err) => {
-        this.errorMsg = err || 'Error creando proyecto';
+        this.errorMsg = 'Error creando proyecto';
+        console.error(err);
         this.loading = false;
       },
       complete: () => {
@@ -302,7 +303,8 @@ export class Projects implements OnInit {
         this.loadProjects();        
       },
       error: (err) => {
-        this.errorMsg = err || 'Error al cambiar de estado a cancelado';
+        this.errorMsg = 'Error al cambiar de estado a cancelado';
+        console.error(err);
         this.loading = false;
       },
       complete: () => {
@@ -329,7 +331,9 @@ export class Projects implements OnInit {
         this.loadClients();
       },
       error: (err) => {
-        this.errorMsg = err || 'Error al descancelar y cambiar de estado a pediente el proyecto';
+        this.errorMsg = 'Error al descancelar y cambiar de estado a pediente el proyecto';
+        console.error(err);
+      
         this.loading = false;
       },
       complete: () => {

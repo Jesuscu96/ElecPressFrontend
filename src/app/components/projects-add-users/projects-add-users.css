@@ -1,0 +1,100 @@
+:host {
+  display: block;
+}
+
+.page {
+  display: grid;
+  gap: 16px;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
+  padding: 16px 24px;
+}
+.projects-card {
+  width: 100%;
+  padding: 16px 20px;
+  margin-bottom: 1rem;
+}
+.catalog-header {
+  display: grid;
+  grid-template-columns: 1fr minmax(320px, 640px) 1fr;
+  align-items: end;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.catalog-header__center {
+  display: flex;
+  justify-content: center;
+}
+
+.catalog-header__right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+label {
+    justify-content: left;
+    text-align: left;
+}
+.input--search {
+  width: 100%;
+  max-width: 640px;
+}
+.thumb {
+  width: 54px;
+  height: 54px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  display: block;
+}
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.table th:first-child,
+.table td:first-child {
+  width: 90px;
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2) {
+  width: 400px; 
+  max-width: 520px;
+}
+
+
+.table th:last-child,
+.table td:last-child {
+  width: 140px;
+  text-align: center; 
+}
+.actions .btn {
+  margin-left: 0.5rem;
+}
+.pagination {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}

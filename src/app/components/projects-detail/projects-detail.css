@@ -40,7 +40,7 @@
 }
 
 .table th:last-child,
-.table td:last-child { text-align: center; }
+.table td:last-child { text-align: left; }
 
 .table-wrap { width: 100%; overflow-x: auto;}
 

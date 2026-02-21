@@ -301,7 +301,7 @@ export class Users implements OnInit {
       !this.last_name.trim() ||
       !this.email.trim() ||
       !this.phone.trim() ||
-      !this.birth_date.trim()
+      !this.birth_date
     ) {
       this.errorMsg =
         'Rellena nombre, apellidos, email, fecha de nacimiento y teléfono.';
@@ -390,7 +390,9 @@ export class Users implements OnInit {
         this.loadUsers();
       },
       error: (err) => {
-        this.errorMsg = err?.error?.message || 'Error creando usuario';
+        this.errorMsg =  'Error creando usuario';
+        console.error(err);
+        
         this.loading = false;
       },
       complete: () => {
@@ -462,7 +464,8 @@ export class Users implements OnInit {
         this.loadUsers();
       },
       error: (err) => {
-        this.errorMsg = err?.error?.message || 'Error actualizando usuario';
+        this.errorMsg = 'Error actualizando usuario';
+        console.error(err);
         this.loading = false;
       },
       complete: () => {
@@ -524,17 +527,17 @@ export class Users implements OnInit {
         this.successMsg = `Usuario ${user.first_name} ${user.last_name} dado de baja.`;
         this.selectedUser = null;
         this.loadUsers();
-        console.log('next');
+        //console.log('next');
       },
       error: (err) => {
-        this.errorMsg = err?.error?.message || 'Error al dar de baja al usuario';
+        this.errorMsg = 'Error al dar de baja al usuario';
+        console.error(err);
         this.loading = false;
-        console.log('Error al dar de baja al usuario');
         
       },
       complete: () => {
         this.loading = false;
-        console.log('complete');
+        //console.log('complete');
       },
     });
   }
@@ -561,8 +564,8 @@ export class Users implements OnInit {
         this.loadUsers();
       },
       error: (err) => {
-        this.errorMsg =
-          err?.error?.message || 'Error al dar de alta al usuario';
+        this.errorMsg = 'Error al dar de alta al usuario';
+        console.error(err);
         this.loading = false;
       },
       complete: () => {
@@ -583,7 +586,8 @@ export class Users implements OnInit {
         this.loadUsers();
       },
       error: (err) => {
-        this.errorMsg = err?.error?.message || 'Error borrando permanentemente';
+        this.errorMsg = 'Error borrando permanentemente';
+        console.error(err);
         this.loading = false;
       },
       complete: () => {
