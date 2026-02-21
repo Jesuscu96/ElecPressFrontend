@@ -19,6 +19,7 @@ export class ProjectsAddMaterials implements OnInit {
   materials: MaterialsInterface[] = [];
   filtered: MaterialsInterface[] = [];
   paged: MaterialsInterface[] = [];
+  
 
   loadingMaterials: boolean = false;
 
@@ -29,12 +30,20 @@ export class ProjectsAddMaterials implements OnInit {
   currentPage: number = 1;
   pageSize: number = 12;
   totalPages: number = 1;
+  
+  // paginated projecmaterials
+  currentPageAssigned: number = 1;
+  pageSizeAssigned: number = 8;
+  totalPagesAssigned: number = 1;
 
   qtyAdd: { [id: number]: number } = {};
 
   assigned: ProjectsMaterialsInterface[] = [];
+  paginatedAssigned: ProjectsMaterialsInterface[] = [] ;
   loadingAssigned: boolean = false;
   qtyEdit: { [id: number]: number } = {};
+  editingRowId: number | null = null;
+  qtyOriginal: { [id: number]: number } = {};
   confirmRowId: number | null = null;
 
   errorMsg: string = '';
@@ -60,8 +69,8 @@ export class ProjectsAddMaterials implements OnInit {
     this.successMsg = '';
 
     this.materialsService.index().subscribe({
-      next: (data: MaterialsInterface[]) => {
-        this.materials = data;
+      next: (value) => {
+        this.materials = value;
 
         this.extractCategories();
         this.initAddQuantities();
@@ -136,6 +145,32 @@ export class ProjectsAddMaterials implements OnInit {
       this.updatePaged();
     }
   }
+  updatePagedAssigned(): void {
+    this.totalPagesAssigned = Math.ceil(this.assigned.length / this.pageSizeAssigned);
+    if (this.totalPagesAssigned < 1) this.totalPagesAssigned = 1;
+
+    if (this.currentPageAssigned > this.totalPagesAssigned) this.currentPageAssigned = this.totalPagesAssigned;
+    if (this.currentPageAssigned < 1) this.currentPageAssigned = 1;
+
+    const start = (this.currentPageAssigned - 1) * this.pageSizeAssigned;
+    const end = start + this.pageSizeAssigned;
+
+    this.paginatedAssigned = this.assigned.slice(start, end);
+  }
+
+  prevPageAssigned(): void {
+    if (this.currentPageAssigned > 1) {
+      this.currentPageAssigned = this.currentPageAssigned - 1;
+      this.updatePagedAssigned();
+    }
+  }
+
+  nextPageAssigned(): void {
+    if (this.currentPageAssigned < this.totalPagesAssigned) {
+      this.currentPageAssigned = this.currentPageAssigned + 1;
+      this.updatePagedAssigned();
+    }
+  }
 
   changePageSize(size: number): void {
     this.pageSize = size;
@@ -149,6 +184,7 @@ export class ProjectsAddMaterials implements OnInit {
     this.projectMaterialsService.index(this.projectId).subscribe({
       next: (value) => {
         this.assigned = value;
+        this.updatePagedAssigned();
         this.initEditQuantities();
       },
       error: (err) => {
@@ -165,7 +201,9 @@ export class ProjectsAddMaterials implements OnInit {
     this.qtyEdit = {};
     this.assigned.forEach((pm) => {
       this.qtyEdit[pm.id] = pm.material_quantity;
+      this.qtyOriginal[pm.id] = pm.material_quantity;
     });
+    
   }
 
   addMaterial(material: MaterialsInterface): void {
@@ -190,10 +228,10 @@ export class ProjectsAddMaterials implements OnInit {
       material_id: material.id,
       quantity: quantity,
     };
-    console.log('POST project-materials body:', body);
+    //console.log('POST project-materials body:', body);
     this.projectMaterialsService.create(body).subscribe({
       next: () => {
-        this.successMsg = 'Material añadido al proyecto.';
+        this.successMsg = `Material añadido al proyecto ${material.name} cantidad ${quantity}.`;
         this.qtyAdd[material.id] = 1;
         this.loadAssigned();
       },
@@ -204,6 +242,14 @@ export class ProjectsAddMaterials implements OnInit {
     });
   }
 
+  startEdit(pm: ProjectsMaterialsInterface): void {
+    this.editingRowId = pm.id;
+  }
+
+  cancelEdit(pm: ProjectsMaterialsInterface): void {
+    this.qtyEdit[pm.id] = this.qtyOriginal[pm.id];
+    this.editingRowId = null;
+  }
   saveQuantity(projectMaterial: ProjectsMaterialsInterface): void {
     this.errorMsg = '';
     this.successMsg = '';
@@ -214,6 +260,10 @@ export class ProjectsAddMaterials implements OnInit {
       this.errorMsg = 'La cantidad debe ser mayor que 0.';
       return;
     }
+    if (newQuantity === this.qtyOriginal[projectMaterial.id]) {
+      this.editingRowId = null;
+      return;
+    }
 
     const body = {
       quantity: newQuantity,
@@ -221,7 +271,9 @@ export class ProjectsAddMaterials implements OnInit {
 
     this.projectMaterialsService.update(projectMaterial.id, body).subscribe({
       next: () => {
-        this.successMsg = 'Cantidad actualizada.';
+        this.successMsg = `Cantidad actualizada de ${projectMaterial.material_name} a ${projectMaterial.material_quantity}.`;
+        this.qtyOriginal[projectMaterial.id] = newQuantity;
+        this.editingRowId = null;
         this.loadAssigned();
       },
       error: (err) => {
@@ -245,7 +297,7 @@ export class ProjectsAddMaterials implements OnInit {
 
     this.projectMaterialsService.delete(projectMaterial.id).subscribe({
       next: () => {
-        this.successMsg = 'Material eliminado del proyecto.';
+        this.successMsg = `Material eliminado del proyecto ${projectMaterial.material_name}.`;
         this.confirmRowId = null;
         this.loadAssigned();
       },

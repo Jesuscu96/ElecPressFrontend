@@ -14,6 +14,8 @@ import { ProjectsDetail } from './components/projects-detail/projects-detail';
 import { AuthGuard } from './guards/auth-guard';
 import { ProjectsEdit } from './components/projects-edit/projects-edit';
 import { ProjectsAddMaterials } from './components/projects-add-materials/projects-add-materials';
+import { ProjectsAddEquipment } from './components/projects-add-equipment/projects-add-equipment';
+import { ProjectsAddUsers } from './components/projects-add-users/projects-add-users';
 
 
 const routes: Routes = [
@@ -73,6 +75,14 @@ const routes: Routes = [
       {
         path: 'projects-add-materials/:id',
         component: ProjectsAddMaterials,
+      },
+      {
+        path: 'projects-add-equipment/:id',
+        component: ProjectsAddEquipment,
+      },
+      {
+        path: 'projects-add-users/:id',
+        component: ProjectsAddUsers,
       },
            
 

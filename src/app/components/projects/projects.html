@@ -177,6 +177,14 @@
                                 <a class="btn" *ngIf="p.status === 'development'" [routerLink]="['/dashboard/projects-add-materials', p.id]">
                                     +Material
                                 </a>
+                                
+                                <a class="btn" *ngIf="p.status === 'development'" [routerLink]="['/dashboard/projects-add-equipment', p.id]">
+                                    +Equipo
+                                </a>
+
+                                <a class="btn" *ngIf="p.status === 'development'" [routerLink]="['/dashboard/projects-add-users', p.id]">
+                                    +Tecnicos Electricistas
+                                </a>
 
                                 <button class="btn btn--delete" *ngIf="p.status !== 'completed' && p.status !== 'cancelled'"  (click)="openSoftConfirm(p)">
                                     Borrar

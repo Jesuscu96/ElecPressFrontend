@@ -1,0 +1,166 @@
+<section class="page">
+
+  <!-- YA ASIGNADOS -->
+  <div class="card projects-card">
+    <div class="card__header">
+      <h2>Ya asignados</h2>
+    </div>
+
+    <div class="loading" *ngIf="loadingAssigned"></div>
+
+    <div class="table-wrap" *ngIf="!loadingAssigned">
+      <table class="table" *ngIf="assigned.length; else emptyAssigned">
+        <thead>
+          <tr>
+            <th>Equipo</th>
+            <th>Cantidad</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-container *ngFor="let pe of paginatedAssigned">
+            <tr>
+              <td>{{ pe.equipment_name }}</td>
+
+              <td>
+                <input class="input input--qty"
+                  type="number" min="1" step="1"
+                  [(ngModel)]="qtyEdit[pe.id]"
+                  [disabled]="editingRowId !== pe.id" />
+              </td>
+
+              <td>
+                <div class="actions" *ngIf="editingRowId !== pe.id">
+                  <button class="btn btn--edit" type="button" (click)="startEdit(pe)">
+                    Editar cantidad
+                  </button>
+
+                  <button class="btn btn--delete" type="button" (click)="openConfirm(pe)">
+                    Borrar
+                  </button>
+                </div>
+
+                <div class="actions" *ngIf="editingRowId === pe.id">
+                  <button class="btn btn--primary" type="button"
+                    (click)="saveQuantity(pe)"
+                    [disabled]="qtyEdit[pe.id] <= 0 || qtyEdit[pe.id] === qtyOriginal[pe.id]">
+                    Guardar
+                  </button>
+
+                  <button class="btn" type="button" (click)="cancelEdit(pe)">
+                    Cancelar
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <tr *ngIf="confirmRowId === pe.id" class="confirm-row">
+              <td colspan="3">
+                <div class="confirm-box">
+                  <span class="confirm-text">¿Quitar este equipo del proyecto?</span>
+                  <div class="confirm-actions">
+                    <button class="btn" type="button" (click)="cancelConfirm()">Cancelar</button>
+                    <button class="btn btn--delete" type="button" (click)="deleteAssigned(pe)">
+                      Confirmar
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+
+      <div class="pagination" *ngIf="totalPagesAssigned >= 1">
+        <button class="btn" (click)="prevPageAssigned()" [disabled]="currentPageAssigned === 1">Anterior</button>
+        <span>Página {{ currentPageAssigned }} / {{ totalPagesAssigned }}</span>
+        <button class="btn" (click)="nextPageAssigned()" [disabled]="currentPageAssigned === totalPagesAssigned">Siguiente</button>
+      </div>
+
+      <ng-template #emptyAssigned>
+        <p class="muted">No hay equipos asignados.</p>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- ALERTAS -->
+  <div class="alert alert--error" *ngIf="errorMsg">
+    {{ errorMsg }}
+    <button class="alert__close" type="button" (click)="errorMsg=''">×</button>
+  </div>
+
+  <div class="alert alert--ok" *ngIf="successMsg">
+    {{ successMsg }}
+    <button class="alert__close" type="button" (click)="successMsg=''">×</button>
+  </div>
+
+  <!-- CATÁLOGO -->
+  <div class="card projects-card">
+
+    <div class="catalog-header">
+      <div class="catalog-header__left">
+        <h2>Catálogo</h2>
+      </div>
+
+      <div class="catalog-header__center">
+        <input class="input input--search" type="text"
+          [(ngModel)]="search" (input)="applyFilters()"
+          placeholder="Buscar equipo..." />
+      </div>
+
+      <div class="catalog-header__right">
+        <select class="input" [(ngModel)]="selectedCategory" (change)="applyFilters()">
+          <option value="all">Todas</option>
+          <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+        </select>
+
+        <button class="btn" type="button" (click)="search=''; selectedCategory='all'; applyFilters()">
+          Limpiar
+        </button>
+      </div>
+    </div>
+
+    <div class="loading" *ngIf="loadingCatalog"></div>
+
+    <div class="catalog-grid" *ngIf="paged.length && !loadingCatalog; else emptyCatalog">
+      <div class="catalog-card card" *ngFor="let e of paged">
+        <div class="catalog-card__img">
+          <img *ngIf="e.image" [src]="e.image" alt="img" />
+          <div class="catalog-card__noimg" *ngIf="!e.image">Sin imagen</div>
+        </div>
+
+        <div class="catalog-card__body">
+          <div class="catalog-card__title">{{ e.name }}</div>
+          <div class="catalog-card__cat">{{ e.category_name }}</div>
+
+          <div class="catalog-card__actions">
+            <input class="input input--qty" type="number" min="1" step="1"
+              [(ngModel)]="qtyAdd[e.id]" />
+
+            <button class="btn btn--primary" type="button" (click)="addEquipment(e)">
+              Añadir
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #emptyCatalog>
+      <p class="muted" *ngIf="!loadingCatalog">No hay equipos.</p>
+    </ng-template>
+
+    <div class="pagination" *ngIf="totalPages >= 1">
+      <button class="btn" (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+      <span>Página {{ currentPage }} / {{ totalPages }}</span>
+      <button class="btn" (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+
+      <select class="input" [(ngModel)]="pageSize" (ngModelChange)="changePageSize($event)">
+        <option [ngValue]="6">6</option>
+        <option [ngValue]="12">12</option>
+        <option [ngValue]="24">24</option>
+      </select>
+    </div>
+
+  </div>
+</section>

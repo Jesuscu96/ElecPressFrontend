@@ -1,9 +1,13 @@
 <section class="page">
 
+
+
     <div class="card projects-card">
+
         <div class="card__header">
             <h2>Ya asignados</h2>
         </div>
+
 
         <div class="loading" *ngIf="loadingAssigned"></div>
 
@@ -18,22 +22,36 @@
                 </thead>
 
                 <tbody>
-                    <ng-container *ngFor="let pm of assigned">
+                    <ng-container *ngFor="let pm of paginatedAssigned">
                         <tr>
                             <td>{{ pm.material_name }}</td>
 
                             <td>
-                                <input class="input input--qty" type="number" min="1" [(ngModel)]="qtyEdit[pm.id]" />
+                                <input class="input input--qty" type="number" min="1" [(ngModel)]="qtyEdit[pm.id]"
+                                    [disabled]="editingRowId !== pm.id" />
+
                             </td>
 
                             <td>
-                                <button class="btn btn--edit" type="button" (click)="saveQuantity(pm)">
-                                    Guardar
-                                </button>
+                                <div class="actions" *ngIf="editingRowId !== pm.id">
+                                    <button class="btn btn--edit" type="button" (click)="startEdit(pm)">
+                                        Editar cantidad
+                                    </button>
 
-                                <button class="btn btn--delete" type="button" (click)="openConfirm(pm)">
-                                    Borrar
-                                </button>
+                                    <button class="btn btn--delete" type="button" (click)="openConfirm(pm)">
+                                        Borrar
+                                    </button>
+                                </div>
+                                <div class="actions" *ngIf="editingRowId === pm.id">
+                                    <button class="btn btn--primary" type="button" (click)="saveQuantity(pm)"
+                                        [disabled]="qtyEdit[pm.id] <= 0 || qtyEdit[pm.id] === qtyOriginal[pm.id]">
+                                        Guardar
+                                    </button>
+
+                                    <button class="btn" type="button" (click)="cancelEdit(pm)">
+                                        Cancelar
+                                    </button>
+                                </div>
                             </td>
                         </tr>
 
@@ -54,10 +72,33 @@
                 </tbody>
             </table>
 
+            <div class="pagination" *ngIf="totalPagesAssigned >= 1">
+                <button class="btn" (click)="prevPageAssigned()"
+                    [disabled]="currentPageAssigned === 1">Anterior</button>
+                <span>Página {{ currentPageAssigned }} / {{ totalPagesAssigned }}</span>
+                <button class="btn" (click)="nextPageAssigned()"
+                    [disabled]="currentPageAssigned === totalPagesAssigned">Siguiente</button>
+            </div>
+
+
+
             <ng-template #emptyAssigned>
                 <p class="muted">No hay materiales asignados.</p>
             </ng-template>
         </div>
+    </div>
+    <div class="alert alert--error" *ngIf="errorMsg">
+        <i class="fa-solid fa-circle-info"></i>
+        {{ errorMsg }}
+        <button class="alert__close" type="button" (click)="errorMsg=''">×</button>
+    </div>
+
+    <div class="alert alert--ok" *ngIf="successMsg">
+        <i class="fa-solid fa-circle-info"></i>
+        {{ successMsg }}
+        <button class="alert__close" type="button" (click)="successMsg=''">
+            ×
+        </button>
     </div>
 
     <div class="card projects-card">
