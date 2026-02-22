@@ -1,6 +1,12 @@
 <section class="page">
 
-  <!-- YA ASIGNADOS -->
+  <div class="header">
+    <div class="header__left"></div>
+    <div class="header__right">
+      <a class="btn" [routerLink]="['/dashboard/projects']">Volver</a>
+    </div>
+  </div>
+  
   <div class="card projects-card">
     <div class="card__header">
       <h2>Ya asignados</h2>
@@ -24,9 +30,7 @@
               <td>{{ pe.equipment_name }}</td>
 
               <td>
-                <input class="input input--qty"
-                  type="number" min="1" step="1"
-                  [(ngModel)]="qtyEdit[pe.id]"
+                <input class="input input--qty" type="number" min="1" step="1" [(ngModel)]="qtyEdit[pe.id]"
                   [disabled]="editingRowId !== pe.id" />
               </td>
 
@@ -42,8 +46,7 @@
                 </div>
 
                 <div class="actions" *ngIf="editingRowId === pe.id">
-                  <button class="btn btn--primary" type="button"
-                    (click)="saveQuantity(pe)"
+                  <button class="btn btn--primary" type="button" (click)="saveQuantity(pe)"
                     [disabled]="qtyEdit[pe.id] <= 0 || qtyEdit[pe.id] === qtyOriginal[pe.id]">
                     Guardar
                   </button>
@@ -75,7 +78,8 @@
       <div class="pagination" *ngIf="totalPagesAssigned >= 1">
         <button class="btn" (click)="prevPageAssigned()" [disabled]="currentPageAssigned === 1">Anterior</button>
         <span>Página {{ currentPageAssigned }} / {{ totalPagesAssigned }}</span>
-        <button class="btn" (click)="nextPageAssigned()" [disabled]="currentPageAssigned === totalPagesAssigned">Siguiente</button>
+        <button class="btn" (click)="nextPageAssigned()"
+          [disabled]="currentPageAssigned === totalPagesAssigned">Siguiente</button>
       </div>
 
       <ng-template #emptyAssigned>
@@ -84,7 +88,7 @@
     </div>
   </div>
 
-  <!-- ALERTAS -->
+
   <div class="alert alert--error" *ngIf="errorMsg">
     {{ errorMsg }}
     <button class="alert__close" type="button" (click)="errorMsg=''">×</button>
@@ -95,7 +99,6 @@
     <button class="alert__close" type="button" (click)="successMsg=''">×</button>
   </div>
 
-  <!-- CATÁLOGO -->
   <div class="card projects-card">
 
     <div class="catalog-header">
@@ -104,8 +107,7 @@
       </div>
 
       <div class="catalog-header__center">
-        <input class="input input--search" type="text"
-          [(ngModel)]="search" (input)="applyFilters()"
+        <input class="input input--search" type="text" [(ngModel)]="search" (input)="applyFilters()"
           placeholder="Buscar equipo..." />
       </div>
 
@@ -135,8 +137,7 @@
           <div class="catalog-card__cat">{{ e.category_name }}</div>
 
           <div class="catalog-card__actions">
-            <input class="input input--qty" type="number" min="1" step="1"
-              [(ngModel)]="qtyAdd[e.id]" />
+            <input class="input input--qty" type="number" min="1" step="1" [(ngModel)]="qtyAdd[e.id]" />
 
             <button class="btn btn--primary" type="button" (click)="addEquipment(e)">
               Añadir

@@ -31,8 +31,27 @@ export class ProjectsDetail implements OnInit {
   project: ProjectInterface | null = null;
 
   users: ProjectsUsersInterface[] = [];
+  usersPaginated: ProjectsUsersInterface[] = [];
   materials: ProjectsMaterialsInterface[] = [];
+  materialsPaginated: ProjectsMaterialsInterface[] = [];
   equipments: ProjectsEquipmentInterface[] = [];
+  equipmentsPaginated: ProjectsEquipmentInterface[] = [];
+
+
+  currentPageMaterials: number = 1;
+  pageSizeMaterials: number = 8;
+  totalPagesMaterials: number = 1;
+
+
+  currentPageUsers: number = 1;
+  pageSizeUsers: number = 8;
+  totalPagesUsers: number = 1;
+
+
+  currentPageEquipment: number = 1;
+  pageSizeEquipment: number = 8;
+  totalPagesEquipment: number = 1;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -60,8 +79,6 @@ export class ProjectsDetail implements OnInit {
     this.loadProjectEquipments();
   }
 
-  
-
   loadProject(): void {
     this.loadingProjects = true;
     this.projectsService.show(this.projectId).subscribe({
@@ -85,6 +102,7 @@ export class ProjectsDetail implements OnInit {
     this.projectsUsersService.index(this.projectId).subscribe({
       next: (value) => {
         this.users = value;
+        this.updatePagedUsers();
       },
       error: (err) => {
         console.error(err);
@@ -95,6 +113,33 @@ export class ProjectsDetail implements OnInit {
         this.loadingUsers = false;
       },
     });
+  }
+
+  updatePagedUsers(): void {
+    this.totalPagesUsers = Math.ceil(this.users.length / this.pageSizeUsers);
+    if (this.totalPagesUsers < 1) this.totalPagesUsers = 1;
+
+    if (this.currentPageUsers > this.totalPagesUsers) this.currentPageUsers = this.totalPagesUsers;
+    if (this.currentPageUsers < 1) this.currentPageUsers = 1;
+
+    const start = (this.currentPageUsers - 1) * this.pageSizeUsers;
+    const end = start + this.pageSizeUsers;
+
+    this.usersPaginated = this.users.slice(start, end);
+  }
+
+  prevPageUsers(): void {
+    if (this.currentPageUsers > 1) {
+      this.currentPageUsers = this.currentPageUsers - 1;
+      this.updatePagedUsers();
+    }
+  }
+
+  nextPageUsers(): void {
+    if (this.currentPageUsers < this.totalPagesUsers) {
+      this.currentPageUsers = this.currentPageUsers + 1;
+      this.updatePagedUsers();
+    }
   }
 
   loadProjectMaterials(): void {
@@ -102,6 +147,7 @@ export class ProjectsDetail implements OnInit {
     this.projectsMaterialsService.index(this.projectId).subscribe({
       next: (value) => {
         this.materials = value;
+        this.updatePagedMaterials();
       },
       error: (err) => {
         console.error(err);
@@ -114,11 +160,40 @@ export class ProjectsDetail implements OnInit {
     });
   }
 
+
+  updatePagedMaterials(): void {
+    this.totalPagesMaterials = Math.ceil(this.materials.length / this.pageSizeMaterials);
+    if (this.totalPagesMaterials < 1) this.totalPagesMaterials = 1;
+
+    if (this.currentPageMaterials > this.totalPagesMaterials) this.currentPageMaterials = this.totalPagesMaterials;
+    if (this.currentPageMaterials < 1) this.currentPageMaterials = 1;
+
+    const start = (this.currentPageMaterials - 1) * this.pageSizeMaterials;
+    const end = start + this.pageSizeMaterials;
+
+    this.materialsPaginated = this.materials.slice(start, end);
+  }
+
+  prevPageMaterials(): void {
+    if (this.currentPageMaterials > 1) {
+      this.currentPageMaterials = this.currentPageMaterials - 1;
+      this.updatePagedMaterials();
+    }
+  }
+
+  nextPageMaterials(): void {
+    if (this.currentPageMaterials < this.totalPagesMaterials) {
+      this.currentPageMaterials = this.currentPageMaterials + 1;
+      this.updatePagedMaterials();
+    }
+  }
+
   loadProjectEquipments(): void {
     this.loadingEquipment = true;
     this.projectsEquipmentsService.index(this.projectId).subscribe({
       next: (value) => {
         this.equipments = value;
+        this.updatePagedEquipments();
       },
       error: (err) => {
         console.error(err);
@@ -129,4 +204,34 @@ export class ProjectsDetail implements OnInit {
       },
     });
   }
+
+
+  updatePagedEquipments(): void {
+    this.totalPagesEquipment = Math.ceil(this.equipments.length / this.pageSizeEquipment);
+    if (this.totalPagesEquipment < 1) this.totalPagesEquipment = 1;
+
+    if (this.currentPageEquipment > this.totalPagesEquipment) this.currentPageEquipment = this.totalPagesEquipment;
+    if (this.currentPageEquipment < 1) this.currentPageEquipment = 1;
+
+    const start = (this.currentPageEquipment - 1) * this.pageSizeEquipment;
+    const end = start + this.pageSizeEquipment;
+
+    this.equipmentsPaginated = this.equipments.slice(start, end);
+  }
+
+  prevPageEquipments(): void {
+    if (this.currentPageEquipment > 1) {
+      this.currentPageEquipment = this.currentPageEquipment - 1;
+      this.updatePagedEquipments();
+    }
+  }
+
+  nextPageEquipments(): void {
+    if (this.currentPageEquipment < this.totalPagesEquipment) {
+      this.currentPageEquipment = this.currentPageEquipment + 1;
+      this.updatePagedEquipments();
+    }
+  }
+
+
 }

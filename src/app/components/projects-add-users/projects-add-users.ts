@@ -26,14 +26,19 @@ export class ProjectsAddUsers implements OnInit {
   loadingUsers: boolean = false;
 
   search: string = '';
-  orderMode: string = 'default'; // default | name_asc | name_desc
+  orderMode: string = 'default'; 
 
   currentPage: number = 1;
   pageSize: number = 10;
   totalPages: number = 1;
 
-  // asignados
+  // paginated projecmaterials
+  currentPageAssigned: number = 1;
+  pageSizeAssigned: number = 8;
+  totalPagesAssigned: number = 1;
+
   assigned: ProjectsUsersInterface[] = [];
+  paginatedAssigned: ProjectsUsersInterface[] = [];
   loadingAssigned: boolean = false;
 
   confirmRowId: number | null = null;
@@ -80,6 +85,7 @@ export class ProjectsAddUsers implements OnInit {
     this.projectsUsersService.index(this.projectId).subscribe({
       next: (value: ProjectsUsersInterface[]) => {
         this.assigned = value;
+        this.updatePagedAssigned();
         this.rebuildAvailableAndFilter();
       },
       error: (err) => {
@@ -94,10 +100,10 @@ export class ProjectsAddUsers implements OnInit {
   }
 
   rebuildAvailableAndFilter(): void {
-    // ids ya asignados
+    
     const assignedIds: number[] = this.assigned.map((a) => a.user_id);
 
-    // solo role user y NO asignados
+    
     this.availableUsers = this.users.filter((u) => {
       const isUserRole = u.role === 'user';
       const alreadyAssigned = assignedIds.includes(u.id);
@@ -161,6 +167,34 @@ export class ProjectsAddUsers implements OnInit {
     if (this.currentPage < this.totalPages) {
       this.currentPage = this.currentPage + 1;
       this.updatePaged();
+    }
+  }
+
+
+  updatePagedAssigned(): void {
+    this.totalPagesAssigned = Math.ceil(this.assigned.length / this.pageSizeAssigned);
+    if (this.totalPagesAssigned < 1) this.totalPagesAssigned = 1;
+
+    if (this.currentPageAssigned > this.totalPagesAssigned) this.currentPageAssigned = this.totalPagesAssigned;
+    if (this.currentPageAssigned < 1) this.currentPageAssigned = 1;
+
+    const start = (this.currentPageAssigned - 1) * this.pageSizeAssigned;
+    const end = start + this.pageSizeAssigned;
+
+    this.paginatedAssigned = this.assigned.slice(start, end);
+  }
+
+  prevPageAssigned(): void {
+    if (this.currentPageAssigned > 1) {
+      this.currentPageAssigned = this.currentPageAssigned - 1;
+      this.updatePagedAssigned();
+    }
+  }
+
+  nextPageAssigned(): void {
+    if (this.currentPageAssigned < this.totalPagesAssigned) {
+      this.currentPageAssigned = this.currentPageAssigned + 1;
+      this.updatePagedAssigned();
     }
   }
 

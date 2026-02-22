@@ -23,7 +23,7 @@
 
   <div class="loading" *ngIf="loadingProjects"></div>
 
-  
+
   <div class="card projects-card" *ngIf="project && !loadingProjects">
     <div class="card__header">
       <h2>Información</h2>
@@ -37,10 +37,10 @@
       <div><b>Creado:</b> {{ project.created_at | date:'dd/MM/yyyy' }}</div>
     </div>
   </div>
-  
 
- 
-   <div class="card projects-card">
+
+
+  <div class="card projects-card">
     <div class="card__header">
       <h2>Usuarios asignados</h2>
     </div>
@@ -48,7 +48,7 @@
     <div class="loading" *ngIf="loadingUsers"></div>
 
     <div class="table-wrap" *ngIf="!loadingUsers">
-      <table class="table" *ngIf="users.length; else emptyUsers">
+      <table class="table" *ngIf="usersPaginated.length; else emptyUsers">
         <thead>
           <tr>
             <th>Imagen</th>
@@ -56,8 +56,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let u of users">
-           
+          <tr *ngFor="let u of usersPaginated">
+
             <td>
               <img *ngIf="u.user_image" class="thumb" [src]="u.user_image" alt="img">
               <span *ngIf="!u.user_image">-</span>
@@ -66,6 +66,12 @@
           </tr>
         </tbody>
       </table>
+      <div class="pagination" *ngIf="totalPagesUsers >= 1">
+        <button class="btn" (click)="prevPageUsers()" [disabled]="currentPageUsers === 1">Anterior</button>
+        <span>Página {{ currentPageUsers }} / {{ totalPagesUsers }}</span>
+        <button class="btn" (click)="nextPageUsers()"
+          [disabled]="currentPageUsers === totalPagesUsers">Siguiente</button>
+      </div>
 
       <ng-template #emptyUsers>
         <p class="muted">No hay users asignados.</p>
@@ -82,7 +88,7 @@
     <div class="loading" *ngIf="loadingMaterials"></div>
 
     <div class="table-wrap" *ngIf="!loadingMaterials">
-      <table class="table" *ngIf="materials.length; else emptyMaterials">
+      <table class="table" *ngIf="materialsPaginated.length; else emptyMaterials">
         <thead>
           <tr>
             <th>Imagen</th>
@@ -91,7 +97,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let m of materials">
+          <tr *ngFor="let m of materialsPaginated">
             <td>
               <img *ngIf="m.material_image" class="thumb" [src]="m.material_image" alt="img">
               <span *ngIf="!m.material_image">-</span>
@@ -101,6 +107,12 @@
           </tr>
         </tbody>
       </table>
+      <div class="pagination" *ngIf="totalPagesMaterials >= 1">
+        <button class="btn" (click)="prevPageMaterials()" [disabled]="currentPageMaterials === 1">Anterior</button>
+        <span>Página {{ currentPageMaterials }} / {{ totalPagesMaterials }}</span>
+        <button class="btn" (click)="nextPageMaterials()"
+          [disabled]="currentPageMaterials === totalPagesMaterials">Siguiente</button>
+      </div>
 
       <ng-template #emptyMaterials>
         <p class="muted">No hay materiales asignados.</p>
@@ -108,7 +120,7 @@
     </div>
   </div>
 
-  
+
   <div class="card projects-card">
     <div class="card__header">
       <h2>Equipment</h2>
@@ -117,7 +129,7 @@
     <div class="loading" *ngIf="loadingEquipment"></div>
 
     <div class="table-wrap" *ngIf="!loadingEquipment">
-      <table class="table" *ngIf="equipments.length; else emptyEquipment">
+      <table class="table" *ngIf="equipmentsPaginated.length; else emptyEquipment">
         <thead>
           <tr>
             <th>Imagen</th>
@@ -126,7 +138,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let e of equipments">
+          <tr *ngFor="let e of equipmentsPaginated">
             <td>
               <img *ngIf="e.equipment_image" class="thumb" [src]="e.equipment_image" alt="img">
               <span *ngIf="!e.equipment_image">-</span>
@@ -136,6 +148,12 @@
           </tr>
         </tbody>
       </table>
+      <div class="pagination" *ngIf="totalPagesEquipment >= 1">
+        <button class="btn" (click)="prevPageEquipments()" [disabled]="currentPageEquipment === 1">Anterior</button>
+        <span>Página {{ currentPageEquipment }} / {{ totalPagesEquipment }}</span>
+        <button class="btn" (click)="nextPageEquipments()"
+          [disabled]="currentPageEquipment === totalPagesEquipment">Siguiente</button>
+      </div>
 
       <ng-template #emptyEquipment>
         <p class="muted">No hay equipment asignado.</p>

@@ -10,6 +10,22 @@
   margin: 0;
   padding: 16px 24px;
 }
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  align-items: end;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.header__right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 .projects-card {
   width: 100%;
   padding: 16px 20px;
@@ -64,6 +80,7 @@ label {
 .table th,
 .table td {
   text-align: center;
+  justify-items: center;
   vertical-align: middle;
   padding: 10px 12px;
   border-bottom: 1px solid var(--border);
@@ -85,6 +102,8 @@ label {
 .table td:last-child {
   width: 140px;
   text-align: center; 
+  
+
 }
 .actions .btn {
   margin-left: 0.5rem;

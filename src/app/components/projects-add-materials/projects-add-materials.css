@@ -10,6 +10,21 @@
   padding: 16px 24px;
 }
 
+.header {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  align-items: end;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.header__right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 .projects-card {
   padding: 16px;
 }

@@ -1,12 +1,18 @@
 <section class="page">
 
+    <div class="header">
+        <div class="header__left"></div>
+        <div class="header__right">
+            <a class="btn" [routerLink]="['/dashboard/projects']">Volver</a>
+        </div>
+    </div>
 
     <div class="card projects-card">
         <div class="card__header">
             <h2>Ya asignados</h2>
         </div>
 
-        <div class="loading" *ngIf="loadingAssigned"></div>
+        <div class="loading" *ngIf="assigned"></div>
 
         <div class="table-wrap" *ngIf="!loadingAssigned">
             <table class="table" *ngIf="assigned.length; else emptyAssigned">
@@ -19,7 +25,7 @@
                 </thead>
 
                 <tbody>
-                    <ng-container *ngFor="let a of assigned">
+                    <ng-container *ngFor="let a of paginatedAssigned">
                         <tr>
                             <td>
                                 <img *ngIf="a.user_image" class="thumb" [src]="a.user_image" alt="img" />
@@ -52,6 +58,13 @@
                 </tbody>
             </table>
 
+            <div class="pagination" *ngIf="totalPagesAssigned >= 1">
+                <button class="btn" (click)="prevPageAssigned()"
+                    [disabled]="currentPageAssigned === 1">Anterior</button>
+                <span>Página {{ currentPageAssigned }} / {{ totalPagesAssigned }}</span>
+                <button class="btn" (click)="nextPageAssigned()"
+                    [disabled]="currentPageAssigned === totalPagesAssigned">Siguiente</button>
+            </div>
             <ng-template #emptyAssigned>
                 <p class="muted">No hay usuarios asignados.</p>
             </ng-template>
