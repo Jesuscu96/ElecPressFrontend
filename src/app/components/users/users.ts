@@ -42,6 +42,10 @@ export class Users implements OnInit {
   role: 'superAdmin' | 'admin' | 'user' | 'inactive' = 'user';
   showPasswordBox: boolean = false;
   newPassword: string = '';
+  password: string = '';
+  confirmPassword: string = '';
+  passwordMatchMsg: string = '';
+  passwordsMatch: boolean = true;
 
   confirmRowId: number | null = null;
   confirmType: 'soft' | 'hard' | null = null;
@@ -289,6 +293,7 @@ export class Users implements OnInit {
     this.birth_date = '';
     this.image = '';
     this.newPassword = '';
+    this.confirmPassword = '';
     this.showPasswordBox = false;
   }
 
@@ -313,7 +318,7 @@ export class Users implements OnInit {
       return false;
     }
     //console.log(this.birth_date);
-    
+
     if (!/^\d{4}-\d{2}-\d{2}$/.test(this.birth_date)) {
       this.errorMsg = 'Fecha no válida. Formato esperado: YYYY-MM-DD';
       return false;
@@ -365,6 +370,28 @@ export class Users implements OnInit {
     }
   }
 
+  checkPasswords(): void {
+    if (!this.newPassword && !this.confirmPassword) {
+      this.passwordsMatch = true;
+      this.passwordMatchMsg = '';
+      return;
+    }
+
+    if (!this.newPassword || !this.confirmPassword) {
+      this.passwordsMatch = false;
+      this.passwordMatchMsg = 'Las contraseñas no coinciden.';
+      return;
+    }
+
+    if (this.newPassword === this.confirmPassword) {
+      this.passwordsMatch = true;
+      this.passwordMatchMsg = 'Contraseñas coinciden';
+    } else {
+      this.passwordsMatch = false;
+      this.passwordMatchMsg = 'Las contraseñas no coinciden.';
+    }
+  }
+
   createUser(): void {
     this.loading = true;
 
@@ -390,9 +417,9 @@ export class Users implements OnInit {
         this.loadUsers();
       },
       error: (err) => {
-        this.errorMsg =  'Error creando usuario';
+        this.errorMsg = 'Error creando usuario';
         console.error(err);
-        
+
         this.loading = false;
       },
       complete: () => {
@@ -411,6 +438,9 @@ export class Users implements OnInit {
     this.editId = user.id;
     this.newPassword = '';
     this.showPasswordBox = false;
+    this.confirmPassword = '';
+    this.passwordMatchMsg = '';
+    this.passwordsMatch = true;
 
     this.first_name = user.first_name != null ? user.first_name : '';
     this.last_name = user.last_name != null ? user.last_name : '';
@@ -464,7 +494,7 @@ export class Users implements OnInit {
         this.loadUsers();
       },
       error: (err) => {
-        this.errorMsg = 'Error actualizando usuario';
+        this.errorMsg = 'Error al actualizar usuario rellene bien los campos y todos los campos son obligatorios excepto imagen ';
         console.error(err);
         this.loading = false;
       },
@@ -496,10 +526,6 @@ export class Users implements OnInit {
       this.selectedUser = null;
     } else {
       this.selectedUser = user;
-      new Date(this.selectedUser.created_at.replace(' ', 'T'));
-      this.selectedUser.birth_date = this.calculateAge(
-        this.selectedUser.birth_date,
-      );
     }
   }
 
@@ -533,7 +559,6 @@ export class Users implements OnInit {
         this.errorMsg = 'Error al dar de baja al usuario';
         console.error(err);
         this.loading = false;
-        
       },
       complete: () => {
         this.loading = false;

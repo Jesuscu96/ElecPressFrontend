@@ -2,7 +2,7 @@
   display: block;
 }
 
-/* Contenedor centrado */
+
 .auth {
   min-height: 100vh;
   display: flex;
@@ -11,18 +11,22 @@
   padding: 24px 16px;
 }
 
-/* Card más “cómoda” */
-.auth__card {
+
+.auth__card{
   width: 100%;
   max-width: 420px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 18px;
-  padding: 22px; /* más espacio */
+  padding: 22px;
   box-shadow: 0 12px 30px rgba(0,0,0,0.08);
 }
 
-/* Textos grandes y claros */
+.theme-dark .auth__card{
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+}
+
+
 .auth__title {
   margin: 0 0 6px;
   font-size: 24px;
@@ -30,14 +34,14 @@
   text-align: center;
 }
 
-.auth__subtitle {
+.auth__subtitle{
   margin: 0 0 18px;
   font-size: 15px;
-  color: #6b7280;
+  opacity: 0.75;   
   text-align: center;
 }
 
-/* Form con buen aire */
+
 .form {
   display: flex;
   flex-direction: column;
@@ -50,29 +54,30 @@
   gap: 8px;
 }
 
-.label {
+.label{
   font-size: 14px;
   font-weight: 700;
-  color: #111827;
+  color: var(--text);
 }
 
-/* Inputs con padding real */
-.input {
+
+.auth .input{
   height: 46px;
   padding: 0 14px;
   border-radius: 14px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border);
   outline: none;
-  font-size: 16px;   /* legible */
-  background: #fff;
+  font-size: 16px;
+  background: var(--surface);
+  color: var(--text);
 }
 
-.input:focus {
-  border-color: #111827;
-  box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.08); /* focus visible */
+.auth .input:focus{
+  box-shadow: 0 0 0 4px var(--focus-ring);
 }
 
-/* Mensaje error visible */
+
+
 .error {
   margin: 0;
   font-size: 14px;
@@ -80,16 +85,10 @@
   text-align: center;
 }
 
-/* Botón grande */
-.btn {
+
+.auth .btn{
   height: 46px;
   border-radius: 14px;
-  border: 1px solid #111827;
-  background: #111827;
-  color: #fff;
-  font-weight: 800;
-  font-size: 16px;
-  cursor: pointer;
 }
 
 .btn:hover {
@@ -101,14 +100,14 @@
   cursor: not-allowed;
 }
 
-/* Link abajo */
+
 .link {
   display: block;
   text-align: center;
   font-size: 14px;
   font-weight: 700;
   margin-top: 8px;
-  color: #111827;
+  color: var(--text);
   text-decoration: none;
 }
 

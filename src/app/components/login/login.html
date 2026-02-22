@@ -1,21 +1,27 @@
-<h1 class="auth__title">Login</h1>
+<div class="auth">
+  <div class="auth__card">
 
-<form class="form" >
-  <div class="field">
-    <label class="label">Email</label>
-    <input class="input" type="email" [(ngModel)]="email" name="email"  />
+
+    <h1 class="auth__title">Login</h1>
+
+    <form class="form">
+      <div class="field">
+        <label class="label">Email</label>
+        <input class="input" type="email" [(ngModel)]="email" name="email" />
+      </div>
+
+      <div class="field">
+        <label class="label">Password</label>
+        <input class="input" type="password" [(ngModel)]="password" name="password" />
+      </div>
+
+      <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+
+      <button class="btn btn--primary" type="submit" (click)="validateForm()" [disabled]="loading">
+        {{ loading ? 'Entrando...' : 'Entrar' }}
+      </button>
+
+
+    </form>
   </div>
-
-  <div class="field">
-    <label class="label">Password</label>
-    <input class="input" type="password" [(ngModel)]="password" name="password"  />
-  </div>
-
-  <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
-
-  <button class="btn btn--primary" type="submit" (click)="validateForm()" [disabled]="loading">
-    {{ loading ? 'Entrando...' : 'Entrar' }}
-  </button>
-
-  
-</form>
+</div>

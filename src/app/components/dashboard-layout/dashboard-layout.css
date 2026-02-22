@@ -1,34 +1,34 @@
-/* Grid general: navbar / main / footer */
+
 .layout {
   min-height: 100vh;
   display: grid;
   grid-template-rows: 56px 1fr auto;
 }
 
-/* Área central: sidebar + content */
+
 .layout__main {
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr); /* ✅ sidebar fijo + contenido flexible */
+  grid-template-columns: 260px minmax(0, 1fr); 
   min-height: 0;
-  min-width: 0; /* ✅ evita que tablas rompan el layout */
+  min-width: 0; 
 }
 
-/* Contenido scrolleable */
+
 .layout__content {
   padding: 16px;
   overflow: auto;
   min-height: 0;
-  min-width: 0; /* ✅ clave */
+  min-width: 0; 
 }
 
-/* Estado cuando sidebar está colapsado */
+
 .layout__main--collapsed {
   grid-template-columns: 76px minmax(0, 1fr);
 }
 
-/* Mobile */
+
 @media (max-width: 1024px) {
-  .layout__main {
+  /* .layout__main {
     grid-template-columns: 1fr;
-  }
+  } */
 }

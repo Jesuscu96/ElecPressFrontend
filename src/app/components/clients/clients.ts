@@ -31,7 +31,7 @@ export class Clients implements OnInit {
   company: string = '';
   phone: string = '';
   email: string = '';
-  created_at: string = ''; 
+  created_at: string = '';
   status: 'active' | 'inactive' = 'active';
 
   confirmRowId: number | null = null;
@@ -103,7 +103,8 @@ export class Clients implements OnInit {
     this.confirmType = 'hard';
     this.confirmClient = c;
 
-    this.confirmMessage = 'Vas a borrar PERMANENTEMENTE. Esta acción no se puede deshacer. ¿Continuar?';
+    this.confirmMessage =
+      'Vas a borrar PERMANENTEMENTE. Esta acción no se puede deshacer. ¿Continuar?';
     this.confirmButtonText = 'Borrar permanentemente';
   }
 
@@ -203,7 +204,12 @@ export class Clients implements OnInit {
       copy.sort((a, b) => {
         const ac = this.toText(a.company).toLowerCase();
         const bc = this.toText(b.company).toLowerCase();
+        const aEmpty = ac === '';
+        const bEmpty = bc === '';
 
+        if (aEmpty && !bEmpty) return 1;
+        if (!aEmpty && bEmpty) return -1;
+        if (aEmpty && bEmpty) return 0;
         if (ac > bc) return 1;
         if (ac < bc) return -1;
         return 0;
@@ -247,8 +253,6 @@ export class Clients implements OnInit {
     const end = start + this.pageSize;
 
     this.paged = this.filtered.slice(start, end);
-    
-
   }
 
   nextPage(): void {
@@ -433,7 +437,8 @@ export class Clients implements OnInit {
         this.loadClients();
       },
       error: (err) => {
-        this.errorMsg = err?.error?.message || 'Error al dar de baja al cliente';
+        this.errorMsg =
+          err?.error?.message || 'Error al dar de baja al cliente';
         this.loading = false;
       },
       complete: () => {
@@ -463,7 +468,8 @@ export class Clients implements OnInit {
         this.loadClients();
       },
       error: (err) => {
-        this.errorMsg = err?.error?.message || 'Error al dar de alta al cliente';
+        this.errorMsg =
+          err?.error?.message || 'Error al dar de alta al cliente';
         this.loading = false;
       },
       complete: () => {
